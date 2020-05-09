@@ -10,7 +10,6 @@ namespace eGreeting.Services
     public interface IFeedbackServices
     {
         List<Feedback> GetAllFeedback();
-        IPagedList<Feedback> GetAllFeedbackPaging(int page, int pageSize);
         Feedback GetFeedback(int id);
         bool CreateFeedback(Feedback feedback);
         bool EditFeedback(Feedback feedback);
@@ -28,12 +27,6 @@ namespace eGreeting.Services
         public List<Feedback> GetAllFeedback()
         {
             List<Feedback> feedbacks = _dbContext.Feedbacks.OrderByDescending(o => o.FeedbackId).ToList();
-            return feedbacks;
-        }
-
-        public IPagedList<Feedback> GetAllFeedbackPaging(int page, int pageSize)
-        {
-            var feedbacks = _dbContext.Feedbacks.OrderByDescending(o => o.FeedbackId).ToPagedList(page, pageSize);
             return feedbacks;
         }
 

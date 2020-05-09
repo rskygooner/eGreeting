@@ -16,6 +16,9 @@ namespace eGreeting.Services
         bool EditUser(User editUser);
         bool DeleteUser(int id);
         bool UpdateIsVIP(User user);
+        bool UpdateSubscribeReceive(User user);
+        bool UpdateSubscribeSend(User user);
+        bool ChangePassword(User user);
     }
     public class UserServices : IUserServices
     {
