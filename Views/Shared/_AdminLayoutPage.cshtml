@@ -1,0 +1,169 @@
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Admin page eGreeting Online</title>
+
+    <!-- Button back top -->
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <!-- CDN mdbootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
+
+    <!-- Style Pagination -->
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <!-- Style SWAL-->
+    <link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+
+    <!-- Style SWAL-->
+    <link rel='stylesheet' href='~/Content/sweetalert.min.css'>
+    <link href="~/Content/Admin/css/dx.common.css" rel="stylesheet" />
+    <link href="~/Content/Admin/css/dx.light.css" rel="stylesheet" />
+    <link href="~/Content/Admin/css/simplePagination.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+
+    <!--CDN Swal -->
+    <script src="~/Content/Admin/js/jquery.min.js"></script>
+
+    <script src="~/Content/Admin/js/jquery.simplePagination.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
+    <script src="~/Content/Admin/js/sweetalert2@8.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Content/Admin/js/dx.all.js"></script>
+
+</head>
+<body class="container-fluid" style="padding: 0">
+    <!-- Admin Layout -->
+    <!-- Back to top button -->
+    <a id="button" style="background-color:#a6c"></a>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark secondary-color sticky-top">
+
+        <!-- Navbar brand -->
+        @Html.ActionLink("Administrator Page", "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Admin/Index">
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Manage Card", "ManageCard", "Admin", new { area = "" }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Manage User", "ManageUser", "Admin", null, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Manage Transaction", "ManageTransaction", "Admin", null, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Manage Payment", "ManagePaymentInfo", "Admin", null, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Manage Feedback", "ManageFeedback", "Admin", null, new { @class = "nav-link" })
+                </li>
+            </ul>
+            <!-- Links -->
+            <!-- Login/Register -->
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                         aria-labelledby="navbarDropdownMenuLink-333">
+                        @if (@Context.Session.GetString("username") == null)
+                        {
+                            <a class="dropdown-item" href="/Home/Login">Sign in</a>
+                            <a class="dropdown-item" href="/Home/Register">Register</a>
+                        }
+                        else
+                        {
+                            if (@Context.Session.GetString("role") != null && @Context.Session.GetString("fullname") != null)
+                            {
+                                if (@Context.Session.GetString("role").ToString() == "true")
+                                {
+                                    <p style="text-align:center;margin:0">Welcome <a class="dropdown-item" href="/User/Index" style="font-weight:900">@Context.Session.GetString("username")</a></p>
+                                }
+                                else
+                                {
+                                    <p style="text-align:center;margin:0">Welcome <a class="dropdown-item" href="/User/Index" style="font-weight:900">@Context.Session.GetString("username")</a></p>
+                                }
+                            }
+                            <a class="dropdown-item" href="/Home/Logout" style="text-align:center;padding-top:0">Sign out</a>
+
+                        }
+                    </div>
+                </li>
+            </ul>
+            <!-- Login/Register -->
+        </div>
+        <!-- Collapsible content -->
+    </nav>
+    <!--/.Navbar-->
+
+    <div class="container body-content" style="padding-top: 30px; padding-bottom: 150px">
+        @Html.Partial("_NotificationPanel")
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small secondary-color" style="position: fixed; width: 100%">
+        <!-- Footer Links -->
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+            <a href="/Home/Index">&copy; @DateTime.Now.Year - eGreeting Online</a>
+        </div>
+        <!-- Copyright -->
+        <!-- JQuery -->
+
+    </footer>
+    <!-- Footer -->
+
+    <script>
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿@{
+    string CurrentName = Convert.ToString(@Url.ActionContext.RouteData.Values["Controller"]);
+    //dynamic Layout;
+    Console.WriteLine(CurrentName);
+    if (CurrentName != null)
+    {
+        switch (CurrentName)
+        {
+            case "Admin":
+                Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+                break;
+            default:
+                Layout = "~/Views/Shared/_Layout.cshtml";
+                break;
+        }
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+    }
+}

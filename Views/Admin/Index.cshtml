@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewBag.Title = "Home Admin";
+    Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+}
+
+<h2 style="text-align:center">Welcome <b>@Context.Session.GetString("username")</b> to Administrator Dashboard</h2>
