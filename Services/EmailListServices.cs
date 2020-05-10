@@ -71,5 +71,22 @@ namespace eGreeting.Services
             }
             return false;
         }
+
+        public IEnumerable<SelectListItem> GetEmail(string username)
+        {
+            var search = GetEmailListByUsername(username);
+            if (search != null)
+            {
+                string[] email = search.ListEmail.Split('\n');
+                var model = new List<SelectListItem>();
+                foreach (var item in email)
+                {
+                    model.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
+                }
+
+                return model;
+            }
+            return null;
+        }
     }
 }

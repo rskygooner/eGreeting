@@ -286,7 +286,7 @@ namespace eGreeting.Controllers
         }
 
         //GET: User/CreateTrans
-        public IActionResult CreateTrans(int id)
+        public IActionResult CreateTransaction(int id)
         {
             if (IsLoggedIn())
             {
