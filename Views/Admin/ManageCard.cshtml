@@ -1,10 +1,9 @@
-﻿@model IEnumerable<eGreeting.Models.Card>
-@using X.PagedList;
+﻿@using X.PagedList;
 @using X.PagedList.Mvc.Core;
-
 @{
     ViewBag.Title = "Manage Card";
     Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+    var pageList = (IPagedList)ViewBag.page;
     int i = 1;
 }
 
@@ -42,20 +41,20 @@
         </th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in ViewBag.page)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NameCard)
+                @item.NameCard
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category)
+                @item.Category
             </td>
             <td width="20%">
                 <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" style="width: 100%" title="@item.ImageName" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
+                @item.DateCreated
             </td>
             <td>
                 <a class="btn btn-warning" href="/Admin/EditCard/@item.CardId"><i class="far fa-edit"></i></a>
@@ -69,7 +68,9 @@
     }
 
 </table>
-
+<div>
+    @Html.PagedListPager(pageList, page => Url.Action("ManageCard", new { page }))
+</div>
 
 <script>
     function doDelete(id) {

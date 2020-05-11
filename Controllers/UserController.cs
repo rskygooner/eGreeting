@@ -76,9 +76,9 @@ namespace eGreeting.Controllers
                         if (_userServices.CreateUser(user))
                         {
                             Alert("Register Successfully!!", NotificationType.success);
-                            HttpContext.Session.SetString("username", search.UserName);
-                            HttpContext.Session.SetString("fullname", search.FullName);
-                            HttpContext.Session.SetString("role", search.Role.ToString().ToLower());
+                            HttpContext.Session.SetString("username", user.UserName);
+                            HttpContext.Session.SetString("fullname", user.FullName);
+                            HttpContext.Session.SetString("role", user.Role.ToString().ToLower());
                             return RedirectToAction("Index", "Home");
                         }
                     }

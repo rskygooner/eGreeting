@@ -33,6 +33,7 @@ namespace eGreeting.Controllers
             _emailListServices = emailListServices;
             _transactionServices = transactionServices;
         }
+
         public IActionResult Index()
         {
             if (IsLoggedIn())
@@ -91,33 +92,17 @@ namespace eGreeting.Controllers
 
 
 
-        //========================================================= Manage Feedback ===========================================================================
-        [HttpPost]
-        public bool InsertFeedback(Feedback feedback)
-        {
-            try
-            {
-                return _feedbackServices.CreateFeedback(feedback);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-
+        //Manage Feedback//
         // GET: Admin/ManageFeedback
         public IActionResult ManageFeedback(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_feedbackServices.GetAllFeedback());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var feedbacks = _feedbackServices.GetAllFeedback().OrderByDescending(x => x.DataCreated).ToPagedList(pageNum, maxSize);
+                ViewBag.page = feedbacks;
+                return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
@@ -155,30 +140,28 @@ namespace eGreeting.Controllers
             }
         }
 
-        //================================================ Manage Card ====================================================//
-
+        //Manage Card//
         // GET: Admin/ManageCard
         public IActionResult ManageCard(string pName, int? page)
         {
-            var model = _cardServices.GetCards();
             if (IsAdmin())
             {
+                var cards = _cardServices.GetCards();
+                int maxSize = 9;
+                var pageNum = page ?? 1;
                 if (!string.IsNullOrEmpty(pName))
                 {
-                    //seartch by name
-                    model = model.Where(p => p.NameCard.ToUpper().Contains(pName)
-                                        || p.NameCard.ToLower().Contains(pName)).ToList();
-                    //items in page
-                    int pageSize = 9;
-                    int pageNumber = (page ?? 1);
-                    return View(model.ToPagedList(pageNumber, pageSize));
+                    var model = cards.Where(x => x.NameCard.Contains(pName.ToLower()) || x.NameCard.Contains(pName.ToUpper()))
+                        .OrderBy(x=>x.NameCard)
+                        .ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
                 }
                 else
                 {
-                    //items in page
-                    int pageSize = 9;
-                    int pageNumber = (page ?? 1);
-                    return View(model.ToPagedList(pageNumber, pageSize));
+                    var model = cards.OrderBy(x => x.NameCard).ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
                 }
             }
             Alert("You not permit to access that page", NotificationType.warning);
@@ -387,26 +370,24 @@ namespace eGreeting.Controllers
         }
 
 
-        //================================================ Manage User ====================================================//
+        //Manage User//
 
         // GET: Admin/ManageUser
         public IActionResult ManageUser(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_userServices.GetUsers());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var users = _userServices.GetUsers().OrderByDescending(x=>x.FullName).ToPagedList(pageNum, maxSize);
+                ViewBag.page = users;
+                return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
         }
 
-        // GET: Admin/CreateCard
+        // GET: Admin/CreateUser
         public IActionResult CreateUser()
         {
             if (IsAdmin())
@@ -417,23 +398,23 @@ namespace eGreeting.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: Admin/CreateCard
+        // POST: Admin/CreateUser
         [HttpPost]
-        public IActionResult CreateUser(User newUser)
+        public IActionResult CreateUser(User user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (newUser.Password != newUser.RePassword)
+                    if (user.Password != user.RePassword)
                     {
                         Alert("RePassword not match!", NotificationType.error);
                         return View();
                     }
-                    var search = _userServices.GetUserByUsername(newUser.UserName);
+                    var search = _userServices.GetUserByUsername(user.UserName);
                     if (search == null)
                     {
-                        if (_userServices.CreateUser(newUser))
+                        if (_userServices.CreateUser(user))
                         {
                             Alert("Create User successfully!", NotificationType.success);
                             return RedirectToAction("ManageUser");
@@ -479,31 +460,31 @@ namespace eGreeting.Controllers
         // POST: Admin/EditUser
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditUser(User editU)
+        public IActionResult EditUser(User user)
         {
             try
             {
-                var searchUser = _userServices.GetUser(editU.UserId);
+                var searchUser = _userServices.GetUser(user.UserId);
                 if (searchUser == null)
                 {
                     Alert("Not found This User", NotificationType.error);
                     return View();
                 }
-                if (editU.Password != editU.RePassword)
+                if (user.Password != user.RePassword)
                 {
                     Alert("Re-Password not match !!!", NotificationType.error);
-                    return View(editU);
+                    return View(user);
                 }
-                if (editU.Password == null || editU.RePassword == null)
+                if (user.Password == null || user.RePassword == null)
                 {
-                    editU.Password = searchUser.Password;
-                    editU.RePassword = searchUser.RePassword;
+                    user.Password = searchUser.Password;
+                    user.RePassword = searchUser.RePassword;
                 }
-                if (editU.UserName == "admin")
+                if (user.UserName == "admin")
                 {
-                    editU.Role = true;
+                    user.Role = true;
                 }
-                if (_userServices.EditUser(editU))
+                if (_userServices.EditUser(user))
                 {
                     Alert("Edit User successfully!", NotificationType.success);
                     return RedirectToAction("ManageUser");
@@ -608,19 +589,17 @@ namespace eGreeting.Controllers
             }
         }
 
-        //================================================ Manage Payment ====================================================//
+        //Manage Payment//
         // GET: /Admin/ManagePaymentInfo
         public IActionResult ManagePaymentInfo(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_paymentServices.GetPayments());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var payments = _paymentServices.GetPayments().OrderByDescending(x=>x.DateCreated).ToPagedList(pageNum, maxSize);
+                ViewBag.page = payments;
+                return View();
             }
             Alert("You not permit to access this page", NotificationType.error);
             return RedirectToAction("Login", "Home");
@@ -687,31 +666,29 @@ namespace eGreeting.Controllers
             }
         }
 
-        //================================================ Manage Transaction====================================================//
+        //Manage Transaction//
         // GET: /Admin/ManageTrans
 
         public IActionResult ManageTransaction(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_transactionServices.GetTransactions());
+                int maxSize = 9;
+                var pageNum = page ?? 1;
+                var transactions = _transactionServices.GetTransactions().OrderByDescending(x=>x.TimeSend).ToPagedList(pageNum, maxSize);
+                ViewBag.page = transactions;
+                return View();
             }
             Alert("You not permit to access this page", NotificationType.error);
             return RedirectToAction("Login", "Home");
         }
         public IActionResult DetailTransaction(int id)
         {
-            var s = _transactionServices.GetTransaction(id);
-            return View(s);
+            var transaction = _transactionServices.GetTransaction(id);
+            return View(transaction);
         }
 
-        public IActionResult DeleteTrans(int id)
+        public IActionResult DeleteManageTransaction(int id)
         {
             try
             {

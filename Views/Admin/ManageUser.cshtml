@@ -1,7 +1,9 @@
-﻿@model IEnumerable<eGreeting.Models.User>
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "Manage User";
     Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+    var pageList = (IPagedList)ViewBag.page;
     int i = 1;
 }
 
@@ -27,11 +29,11 @@
         <th style="width:15%">Action</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in ViewBag.page)
     {
         <tr>
             <td>@i</td>
-            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+            <td>@item.UserName</td>
             <td>
                 @if (item.Role)
                 {<label>Admin</label>}
@@ -67,7 +69,7 @@
                 {<label>No</label>}
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FullName)
+                @item.FullName
             </td>
             <td>
                 @if (item.Gender)
@@ -75,8 +77,8 @@
                 else
                 {<label>Female</label>}
             </td>
-            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
-            <td> @Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@item.Phone</td>
+            <td>@item.Email</td>
             <td style="text-align: center;">
                 <a href="/Admin/EditEmailList/@item.UserId" style="font-weight: 900;color: blue;">Manage Email List</a><br />
                 <a href="/Admin/EditUser/@item.UserId" class="btn btn-warning"><i class="far fa-edit"></i></a>
@@ -90,9 +92,11 @@
         </tr>
         i++;
     }
-
 </table>
 
+<div>
+    @Html.PagedListPager(pageList, page => Url.Action("ManageUser", new { page }))
+</div>
 
 <script>
     // delete

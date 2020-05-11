@@ -1,9 +1,9 @@
-﻿@model IEnumerable<eGreeting.Models.Transaction>
-
-
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "ManageTrans";
     Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+    var pageList = (IPagedList)ViewBag.page;
 }
 
 <h2>Manage Transaction</h2>
@@ -19,16 +19,16 @@
         <th>TimeSend</th>
         <th>Action</th>
     </tr>
-    @foreach (var item in Model)
+    @foreach (var item in ViewBag.page)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Username)</td>
-            <td>@Html.DisplayFor(modelItem => item.Receiver)</td>
-            <td>@Html.DisplayFor(modelItem => item.Subject)</td>
-            <td id="Content">@Html.DisplayFor(modelItem => item.Content)</td>
-            <td>@Html.DisplayFor(modelItem => item.NameCard)</td>
+            <td>@item.Username</td>
+            <td>@item.Receiver</td>
+            <td>@item.Subject</td>
+            <td id="Content">@item.Content</td>
+            <td>@item.NameCard</td>
             <td><img src="~/ImageCard/@item.ImageNameTrans" alt="@item.ImageNameTrans" style="width:100%" /></td>
-            <td>@Html.DisplayFor(modelItem => item.TimeSend)</td>
+            <td>@item.TimeSend</td>
             <td style="width: 20%">
                 <a href="@Url.Action("DetailTransaction", "Admin", new { id = item.TransId })" class="btn btn-warning">
                     <i class="fas fa-info"></i>
@@ -38,6 +38,9 @@
         </tr>
     }
 </table>
+<div>
+    @Html.PagedListPager(pageList, page => Url.Action("ManageFeedback", new { page }))
+</div>
 <script>
     var lengthContent = $('#Content').text().length;
     if (lengthContent > 50) {
@@ -62,9 +65,9 @@
                     type: "POST",
                     data: { id: id },
                     success: function (res) {
-                        if (res) {                            
+                        if (res) {
                             location.reload();
-                        }                      
+                        }
                     }
                 })
                 Swal.fire(
