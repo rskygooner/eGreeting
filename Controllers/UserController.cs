@@ -73,7 +73,7 @@ namespace eGreeting.Controllers
                             Alert("Register Successfully!!", NotificationType.success);
                             HttpContext.Session.SetString("username", user.UserName);
                             HttpContext.Session.SetString("fullname", user.FullName);
-                            HttpContext.Session.SetString("role", user.Role.ToString().ToLower());
+                            HttpContext.Session.SetString("role", Role.User.ToString().ToLower());
                             return RedirectToAction("Index", "Home");
                         }
                     }

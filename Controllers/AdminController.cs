@@ -174,8 +174,8 @@ namespace eGreeting.Controllers
         {
             if (IsAdmin())
             {
-                //var categoryList = _categoryServices.GetCategories();
-
+                var categoryList = _categoryServices.GetCategories();
+                ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
                 return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
@@ -260,6 +260,8 @@ namespace eGreeting.Controllers
                     var search = _cardServices.GetCard(id);
                     if (search != null)
                     {
+                        var categoryList = _categoryServices.GetCategories();
+                        ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
                         return View(search);
                     }
                     Alert("Cannot get Card", NotificationType.error);
@@ -382,7 +384,6 @@ namespace eGreeting.Controllers
 
 
         //Manage User//
-
         // GET: Admin/ManageUser
         public IActionResult ManageUser(int? page)
         {

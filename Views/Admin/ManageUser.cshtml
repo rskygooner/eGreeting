@@ -58,7 +58,7 @@
             <td>@item.Email</td>
             <td style="text-align: center;">
                 <a href="/Admin/EditEmailList/@item.UserName" style="font-weight: 900;color: blue;">Subscrible List</a><br />
-                <a href="/Admin/EditUser/@item.UserName" class="btn btn-warning"><i class="far fa-edit"></i></a>
+                @Html.ActionLink("Edit", "EditUser", new { username = item.UserName }, new { @class = "btn btn-warning" })
                 @if (item.Role == Role.User)
                 {
                     <a onClick="doDelete(@item.UserName)" class="btn btn-danger btn-circle">
