@@ -23,9 +23,13 @@ namespace eGreeting.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Category")
+                    b.Property<string>("CardName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime");
@@ -33,10 +37,8 @@ namespace eGreeting.Migrations
                     b.Property<string>("ImageName")
                         .HasColumnType("text");
 
-                    b.Property<string>("NameCard")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<byte>("IsActive")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("CardId");
 
@@ -46,454 +48,528 @@ namespace eGreeting.Migrations
                         new
                         {
                             CardId = 1,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(5998),
+                            CardName = "Birthday-01",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 557, DateTimeKind.Local).AddTicks(9773),
                             ImageName = "b-image1.png",
-                            NameCard = "Birthday-01"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 2,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6921),
+                            CardName = "Birthday-02",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(657),
                             ImageName = "b-image2.png",
-                            NameCard = "Birthday-02"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 3,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6956),
+                            CardName = "Birthday-03",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(673),
                             ImageName = "b-image3.png",
-                            NameCard = "Birthday-03"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 4,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6958),
+                            CardName = "Birthday-04",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(675),
                             ImageName = "b-image4.png",
-                            NameCard = "Birthday-04"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 5,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6960),
+                            CardName = "Birthday-05",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(677),
                             ImageName = "b-image5.png",
-                            NameCard = "Birthday-05"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 6,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6962),
+                            CardName = "Birthday-06",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(680),
                             ImageName = "b-image6.png",
-                            NameCard = "Birthday-06"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 7,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6964),
+                            CardName = "Birthday-07",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(682),
                             ImageName = "b-image7.png",
-                            NameCard = "Birthday-07"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 8,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6966),
+                            CardName = "Birthday-08",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(684),
                             ImageName = "b-image8.jpg",
-                            NameCard = "Birthday-08"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 9,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6968),
+                            CardName = "Birthday-09",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(686),
                             ImageName = "b-image9.png",
-                            NameCard = "Birthday-09"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 10,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6970),
+                            CardName = "Birthday-10",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(688),
                             ImageName = "b-image10.png",
-                            NameCard = "Birthday-10"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 11,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6972),
+                            CardName = "Birthday-11",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(690),
                             ImageName = "b-image11.png",
-                            NameCard = "Birthday-11"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 12,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6973),
+                            CardName = "Birthday-12",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(692),
                             ImageName = "b-image12.png",
-                            NameCard = "Birthday-12"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 13,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6975),
+                            CardName = "Birthday-13",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(694),
                             ImageName = "b-image13.png",
-                            NameCard = "Birthday-13"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 14,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6977),
+                            CardName = "Birthday-14",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(696),
                             ImageName = "b-image14.png",
-                            NameCard = "Birthday-14"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 15,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6980),
+                            CardName = "Birthday-15",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(698),
                             ImageName = "b-image15.png",
-                            NameCard = "Birthday-15"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 16,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6982),
+                            CardName = "Birthday-16",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(700),
                             ImageName = "b-image16.png",
-                            NameCard = "Birthday-16"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 17,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6983),
+                            CardName = "Birthday-17",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(701),
                             ImageName = "b-image17.png",
-                            NameCard = "Birthday-17"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 18,
-                            Category = "Birthday",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6985),
+                            CardName = "Birthday-18",
+                            CategoryId = 1,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(704),
                             ImageName = "b-image18.png",
-                            NameCard = "Birthday-18"
+                            IsActive = (byte)0
                         },
                         new
                         {
                             CardId = 54,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6987),
+                            CardName = "NewYear-01",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(706),
                             ImageName = "n-image1.png",
-                            NameCard = "NewYear-01"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 19,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6989),
+                            CardName = "NewYear-02",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(708),
                             ImageName = "n-image2.jpg",
-                            NameCard = "NewYear-02"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 20,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6990),
+                            CardName = "NewYear-03",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(710),
                             ImageName = "n-image3.png",
-                            NameCard = "NewYear-03"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 21,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6993),
+                            CardName = "NewYear-04",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(711),
                             ImageName = "n-image4.jpg",
-                            NameCard = "NewYear-04"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 22,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6994),
+                            CardName = "NewYear-05",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(713),
                             ImageName = "n-image5.jpg",
-                            NameCard = "NewYear-05"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 23,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6996),
+                            CardName = "NewYear-06",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(715),
                             ImageName = "n-image6.jpg",
-                            NameCard = "NewYear-06"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 24,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(6998),
+                            CardName = "NewYear-07",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(717),
                             ImageName = "n-image7.png",
-                            NameCard = "NewYear-07"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 25,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7000),
+                            CardName = "NewYear-08",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(719),
                             ImageName = "n-image8.png",
-                            NameCard = "NewYear-08"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 26,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7003),
+                            CardName = "NewYear-09",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(721),
                             ImageName = "n-image9.png",
-                            NameCard = "NewYear-09"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 27,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7005),
+                            CardName = "NewYear-10",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(723),
                             ImageName = "n-image10.png",
-                            NameCard = "NewYear-10"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 28,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7007),
+                            CardName = "NewYear-11",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(724),
                             ImageName = "n-image11.jpg",
-                            NameCard = "NewYear-11"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 29,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7009),
+                            CardName = "NewYear-12",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(726),
                             ImageName = "n-image12.jpg",
-                            NameCard = "NewYear-12"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 30,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7010),
+                            CardName = "NewYear-13",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(728),
                             ImageName = "n-image13.jpg",
-                            NameCard = "NewYear-13"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 31,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7013),
+                            CardName = "NewYear-14",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(730),
                             ImageName = "n-image14.jpg",
-                            NameCard = "NewYear-14"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 32,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7014),
+                            CardName = "NewYear-15",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(733),
                             ImageName = "n-image15.jpg",
-                            NameCard = "NewYear-15"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 33,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7016),
+                            CardName = "NewYear-16",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(734),
                             ImageName = "n-image16.jpg",
-                            NameCard = "NewYear-16"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 34,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7018),
+                            CardName = "NewYear-17",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(736),
                             ImageName = "n-image17.jpg",
-                            NameCard = "NewYear-17"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 35,
-                            Category = "NewYear",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7020),
+                            CardName = "NewYear-18",
+                            CategoryId = 2,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(738),
                             ImageName = "n-image18.jpg",
-                            NameCard = "NewYear-18"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 36,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7023),
+                            CardName = "Festival-01",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(740),
                             ImageName = "f-image1.png",
-                            NameCard = "Festival-01"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 37,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7025),
+                            CardName = "Festival-02",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(742),
                             ImageName = "f-image2.jpg",
-                            NameCard = "Festival-02"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 38,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7027),
+                            CardName = "Festival-03",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(744),
                             ImageName = "f-image3.jpg",
-                            NameCard = "Festival-03"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 39,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7028),
+                            CardName = "Festival-04",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(746),
                             ImageName = "f-image4.jpg",
-                            NameCard = "Festival-04"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 40,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7030),
+                            CardName = "Festival-05",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(748),
                             ImageName = "f-image5.jpg",
-                            NameCard = "Festival-05"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 41,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7032),
+                            CardName = "Festival-06",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(749),
                             ImageName = "f-image6.jpg",
-                            NameCard = "Festival-06"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 42,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7034),
+                            CardName = "Festival-07",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(751),
                             ImageName = "f-image7.jpg",
-                            NameCard = "Festival-07"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 43,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7036),
+                            CardName = "Festival-08",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(753),
                             ImageName = "f-image8.png",
-                            NameCard = "Festival-08"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 44,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7038),
+                            CardName = "Festival-09",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(755),
                             ImageName = "f-image9.png",
-                            NameCard = "Festival-09"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 45,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7040),
+                            CardName = "Festival-10",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(757),
                             ImageName = "f-image10.png",
-                            NameCard = "Festival-10"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 46,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7042),
+                            CardName = "Festival-11",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(759),
                             ImageName = "f-image11.png",
-                            NameCard = "Festival-11"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 47,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7043),
+                            CardName = "Festival-12",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(761),
                             ImageName = "f-image12.png",
-                            NameCard = "Festival-12"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 48,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7045),
+                            CardName = "Festival-13",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(763),
                             ImageName = "f-image13.jpg",
-                            NameCard = "Festival-13"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 49,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7047),
+                            CardName = "Festival-14",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(765),
                             ImageName = "f-image14.jpg",
-                            NameCard = "Festival-14"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 50,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7048),
+                            CardName = "Festival-15",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(767),
                             ImageName = "f-image15.png",
-                            NameCard = "Festival-15"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 51,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7050),
+                            CardName = "Festival-16",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(769),
                             ImageName = "f-image16.jpg",
-                            NameCard = "Festival-16"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 52,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7052),
+                            CardName = "Festival-17",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(771),
                             ImageName = "f-image17.png",
-                            NameCard = "Festival-17"
+                            IsActive = (byte)1
                         },
                         new
                         {
                             CardId = 53,
-                            Category = "Festival",
-                            DateCreated = new DateTime(2020, 5, 7, 16, 44, 39, 943, DateTimeKind.Local).AddTicks(7054),
+                            CardName = "Festival-18",
+                            CategoryId = 3,
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 558, DateTimeKind.Local).AddTicks(773),
                             ImageName = "f-image18.jpg",
-                            NameCard = "Festival-18"
+                            IsActive = (byte)1
                         });
                 });
 
-            modelBuilder.Entity("eGreeting.Models.EmailList", b =>
+            modelBuilder.Entity("eGreeting.Models.Category", b =>
                 {
-                    b.Property<int>("EmailId")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ListEmail")
+                    b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<byte>("IsActive")
+                        .HasColumnType("tinyint");
 
-                    b.HasKey("EmailId");
+                    b.HasKey("CategoryId");
 
-                    b.ToTable("EmailLists");
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Birthday",
+                            IsActive = (byte)1
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Newyear",
+                            IsActive = (byte)1
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Festival",
+                            IsActive = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("eGreeting.Models.Feedback", b =>
@@ -507,8 +583,11 @@ namespace eGreeting.Migrations
                         .HasColumnType("varchar(1000)")
                         .HasMaxLength(1000);
 
-                    b.Property<DateTime>("DataCreated")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime");
+
+                    b.Property<byte>("IsChecked")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -529,9 +608,10 @@ namespace eGreeting.Migrations
                         {
                             FeedbackId = 1,
                             Content = "Hello Handsome Guys",
-                            DataCreated = new DateTime(2020, 5, 7, 16, 44, 39, 940, DateTimeKind.Local).AddTicks(7443),
-                            Subject = "test",
-                            Username = "test"
+                            DateCreated = new DateTime(2020, 5, 12, 17, 1, 49, 555, DateTimeKind.Local).AddTicks(5584),
+                            IsChecked = (byte)0,
+                            Subject = "user",
+                            Username = "user"
                         });
                 });
 
@@ -555,11 +635,8 @@ namespace eGreeting.Migrations
                     b.Property<DateTime>("DateExpire")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<byte>("IsActive")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -577,10 +654,30 @@ namespace eGreeting.Migrations
                             BankAccount = 9405123465478545L,
                             BankName = "ACB",
                             DateExpire = new DateTime(2022, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
-                            UserId = 2,
-                            UserName = "test"
+                            IsActive = (byte)0,
+                            UserName = "user"
                         });
+                });
+
+            modelBuilder.Entity("eGreeting.Models.SubscribeList", b =>
+                {
+                    b.Property<int>("SubscribeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubscribeEmail")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("SubscribeId");
+
+                    b.ToTable("SubscribeLists");
                 });
 
             modelBuilder.Entity("eGreeting.Models.Transaction", b =>
@@ -589,24 +686,21 @@ namespace eGreeting.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("varchar(1000)")
                         .HasMaxLength(1000);
 
-                    b.Property<string>("ImageNameTrans")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("NameCard")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50);
-
                     b.Property<string>("Receiver")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -615,6 +709,10 @@ namespace eGreeting.Migrations
 
                     b.Property<DateTime>("TimeSend")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("TransImage")
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -629,21 +727,22 @@ namespace eGreeting.Migrations
                         new
                         {
                             TransId = 1,
+                            CardId = 0,
                             Content = "Hello your 30! Wish you see many many lucky with this old, happiness and healthy",
-                            ImageNameTrans = "b-image1.png",
-                            NameCard = "Birthday-01",
                             Receiver = "receiver@gmail.com",
+                            Status = (byte)0,
                             Subject = "Happy Birthday my friend",
-                            TimeSend = new DateTime(2020, 5, 7, 16, 44, 39, 942, DateTimeKind.Local).AddTicks(539),
-                            Username = "test"
+                            TimeSend = new DateTime(2020, 5, 12, 17, 1, 49, 557, DateTimeKind.Local).AddTicks(1685),
+                            TransImage = "b-image1.png",
+                            Username = "user"
                         });
                 });
 
             modelBuilder.Entity("eGreeting.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserName")
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -655,20 +754,11 @@ namespace eGreeting.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("Gender")
-                        .HasColumnType("bit");
+                    b.Property<byte>("Gender")
+                        .HasColumnType("tinyint");
 
-                    b.Property<bool>("IsDeactive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSubcribeReceive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSubcribeSend")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsVIP")
-                        .HasColumnType("bit");
+                    b.Property<byte>("IsActive")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -679,55 +769,35 @@ namespace eGreeting.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("RePassword")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<byte>("Role")
+                        .HasColumnType("tinyint");
 
-                    b.Property<bool>("Role")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("UserId");
+                    b.HasKey("UserName");
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            UserId = 1,
+                            UserName = "admin",
                             Email = "admin@egreeting.com",
                             FullName = "Admin",
-                            Gender = true,
-                            IsDeactive = false,
-                            IsSubcribeReceive = false,
-                            IsSubcribeSend = false,
-                            IsVIP = true,
+                            Gender = (byte)1,
+                            IsActive = (byte)1,
                             Password = "admin1234",
                             Phone = "0762327226",
-                            RePassword = "admin1234",
-                            Role = true,
-                            UserName = "admin"
+                            Role = (byte)0
                         },
                         new
                         {
-                            UserId = 2,
+                            UserName = "user",
                             Email = "test@gmail.com",
-                            FullName = "test",
-                            Gender = true,
-                            IsDeactive = false,
-                            IsSubcribeReceive = false,
-                            IsSubcribeSend = false,
-                            IsVIP = false,
+                            FullName = "Test User",
+                            Gender = (byte)1,
+                            IsActive = (byte)1,
                             Password = "123123123",
                             Phone = "0762371254",
-                            RePassword = "123123123",
-                            Role = false,
-                            UserName = "test"
+                            Role = (byte)1
                         });
                 });
 #pragma warning restore 612, 618

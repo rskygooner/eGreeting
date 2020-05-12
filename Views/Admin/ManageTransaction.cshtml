@@ -26,8 +26,8 @@
             <td>@item.Receiver</td>
             <td>@item.Subject</td>
             <td id="Content">@item.Content</td>
-            <td>@item.NameCard</td>
-            <td><img src="~/ImageCard/@item.ImageNameTrans" alt="@item.ImageNameTrans" style="width:100%" /></td>
+            <td>@item.CardId</td>
+            <td><img src="~/ImageCard/@item.TransImage" alt="@item.TransImage" style="width:100%" /></td>
             <td>@item.TimeSend</td>
             <td style="width: 20%">
                 <a href="@Url.Action("DetailTransaction", "Admin", new { id = item.TransId })" class="btn btn-warning">

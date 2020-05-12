@@ -89,11 +89,11 @@ namespace eGreeting.Services
             {
                 if (!check)
                 {
-                    search.IsActive = check;
+                    search.IsActive = Status.Inactive;
                 }
                 else
                 {
-                    search.IsActive = check;
+                    search.IsActive = Status.Active;
                     search.DateCreated = DateTime.Now;
                 }
                 _dbContext.SaveChanges();

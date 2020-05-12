@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace eGreeting.Models
 {
-    public class EmailList
+    public class Category
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmailId { get; set; }
+        public int CategoryId { get; set; }
 
         [Required]
-        public string Username { get; set; }
+        [StringLength(50, ErrorMessage = "Category Name cannot more than 50 characters. ")]
+        public string CategoryName { get; set; }
 
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        public string ListEmail { get; set; }
+        [EnumDataType(typeof(Status))]
+        public Status IsActive { get; set; }
     }
 }

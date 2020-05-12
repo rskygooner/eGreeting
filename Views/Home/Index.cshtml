@@ -61,148 +61,237 @@
         </div>
     </div>
 </div>
-    <!-- Section key features -->
-    <section id="key-features-section">
-        <div class="container py-5 px-0">
-            <div class="row justify-content-center my-xl-5">
-                <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
-                    <div>
-                        <a><img src="~/content/img/11.png"></a>
-                    </div>
-                    <p class="key-feature-title my-2">Designer Quality in No Time</p>
-                    <p class="key-feature-subtitle">Exceed your expectations with our exclusive designs</p>
+<!-- Section key features -->
+<section id="key-features-section">
+    <div class="container py-5 px-0">
+        <div class="row justify-content-center my-xl-5">
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/11.png"></a>
                 </div>
-                <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
-                    <div>
-                        <a><img src="~/content/img/easy-to-use.png"></a>
-                    </div>
-                    <p class="key-feature-title my-2">Easy to Use</p>
-                    <p class="key-feature-subtitle">Anyone can make an impressive creation in minutes</p>
+                <p class="key-feature-title my-2">Designer Quality in No Time</p>
+                <p class="key-feature-subtitle">Exceed your expectations with our exclusive designs</p>
+            </div>
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/easy-to-use.png"></a>
                 </div>
-                <div class="w-100 d-md-block d-xl-none"></div>
-                <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
-                    <div>
-                        <a><img src="~/content/img/share-your-creation.png"></a>
-                    </div>
-                    <p class="key-feature-title my-2">Share Your Creation</p>
-                    <p class="key-feature-subtitle">Share your creation via email or social media</p>
+                <p class="key-feature-title my-2">Easy to Use</p>
+                <p class="key-feature-subtitle">Anyone can make an impressive creation in minutes</p>
+            </div>
+            <div class="w-100 d-md-block d-xl-none"></div>
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/share-your-creation.png"></a>
                 </div>
+                <p class="key-feature-title my-2">Share Your Creation</p>
+                <p class="key-feature-subtitle">Share your creation via email or social media</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Section Our Team -->
-    <section class="team-section text-center my-5">
-        <div class="container">
 
-            <!-- Section heading -->
-            <h2 class="h1-responsive font-weight-bold text-center my-5" style="color: #149c9c !important;">About us</h2>
-            <div style="text-align:center">
-                <p class="grey-text w-responsive mx-auto mb-5" style="text-align:justify; color: #000 !important">
-                    <h5 class="subtitle">Greeting cards are usually given on special occasions such as Birthday or other holidays, such as New Year and Festival. There is many kind of greeting card, but today, information technology is growing, we do not need to go to the greeting card shop but still can send greeting cards with just a mouse click.<br> With e-greeting cards, we make your celebrates easier, saving your cost, time, effort is our top priority!</h5>
-                </p>
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">Birthday</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive">
+                    @if (ViewBag.birthday != null)
+                    {
+                        foreach (var item in ViewBag.birthday)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
             </div>
-            <!-- Section description -->
-            <!-- Grid row -->
-            <div class="row py-5">
-
-                <!-- Grid column Phuc-->
-                <div class="col-lg-3 col-md-6 mb-lg-0 mb-5">
-                    <div class="avatar mx-auto">
-                        <img src="~/Content/AvatarTeam/Avatar-Phuc.PNG" class="rounded-circle z-depth-1"
-                             alt="Avatar-Phuc" style="width:60%">
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">Le Gia Phuc</h5>
-                    <p class="text-uppercase blue-text"><strong>Graphic designer</strong></p>
-                    <p class="grey-text">
-
-                    </p>
-                </div>
-                <!-- Grid column -->
-                <!-- Grid column Dung-->
-                <div class="col-lg-3 col-md-6 mb-lg-0 mb-5">
-                    <div class="avatar mx-auto">
-                        <img src="~/Content/AvatarTeam/Avatar-Dung.png" class="rounded-circle z-depth-1"
-                             alt="Avatar-Dung" style="width:60%">
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">Bui Duc Dung</h5>
-                    <p class="text-uppercase blue-text"><strong>Web developer</strong></p>
-                    <p class="grey-text">
-                    </p>
-                </div>
-                <!-- Grid column -->
-                <!-- Grid column Phuc-->
-                <div class="col-lg-3 col-md-6 mb-md-0 mb-5">
-                    <div class="avatar mx-auto">
-                        <img src="~/Content/AvatarTeam/Avatar-Vi.png" class="rounded-circle z-depth-1"
-                             alt="Avatar-Vi" style="width:60%">
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">Phuong The Vi</h5>
-                    <p class="text-uppercase blue-text"><strong>Web developer</strong></p>
-                    <p class="grey-text">
-                    </p>
-                </div>
-                <!-- Grid column -->
-                <!-- Grid column Vi-->
-                <div class="col-lg-3 col-md-6">
-                    <div class="avatar mx-auto">
-                        <img src="~/Content/AvatarTeam/Avatar-Phuong.jpg" class="rounded-circle z-depth-1"
-                             alt="Avatar-Phuong" style="width:60%">
-                    </div>
-                    <h5 class="font-weight-bold mt-4 mb-3">Ngo Duy Phuong</h5>
-                    <p class="text-uppercase blue-text"><strong>Backend developer</strong></p>
-                    <p class="grey-text">
-                    </p>
-                </div>
-                <!-- Grid column -->
-
-            </div>
-            <!-- Grid row -->
-
         </div>
-    </section>
-    <!--/.Section Our Team -->
-    <!-- Section: Contact v.1 -->
-    <section class="team-section text-center my-5">
+    </div>
+</div>
+
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">New Year</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive-1">
+                    @if (ViewBag.festival != null)
+                    {
+                        foreach (var item in ViewBag.festival)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">Festival</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive-2">
+                    @if (ViewBag.newyear != null)
+                    {
+                        foreach (var item in ViewBag.newyear)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Section Our Team -->
+<section class="team-section text-center my-5">
+    <div class="container">
 
         <!-- Section heading -->
-        <h2 class="h1-responsive font-weight-bold my-5" style="color: #149c9c !important">Contact Us</h2>
+        <h2 class="h1-responsive font-weight-bold text-center my-5" style="color: #149c9c !important;">About us</h2>
+        <div style="text-align:center">
+            <p class="grey-text w-responsive mx-auto mb-5" style="text-align:justify; color: #000 !important">
+                <h5 class="subtitle">Greeting cards are usually given on special occasions such as Birthday or other holidays, such as New Year and Festival. There is many kind of greeting card, but today, information technology is growing, we do not need to go to the greeting card shop but still can send greeting cards with just a mouse click.<br> With e-greeting cards, we make your celebrates easier, saving your cost, time, effort is our top priority!</h5>
+            </p>
+        </div>
+        <!-- Section description -->
+        <!-- Grid row -->
+        <div class="row py-5">
 
-        <!-- Grid column -->
-        <!-- Grid column -->
-        <div class="container">
+            <!-- Grid column Phuc-->
+            <div class="col-lg-3 col-md-6 mb-lg-0 mb-5">
+                <div class="avatar mx-auto">
+                    <img src="~/Content/AvatarTeam/Avatar-Phuc.PNG" class="rounded-circle z-depth-1"
+                         alt="Avatar-Phuc" style="width:60%">
+                </div>
+                <h5 class="font-weight-bold mt-4 mb-3">Le Gia Phuc</h5>
+                <p class="text-uppercase blue-text"><strong>Graphic designer</strong></p>
+                <p class="grey-text">
 
-            <!--Google map-->
-            <div id="map-container-section" class="z-depth-1-half map-container-section mb-4" style="height: 400px">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3257176556144!2d106.6641388146226!3d10.78634619231479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed23ca5d8db%3A0x24d414f45e5a523!2zNTkwIEPDoWNoIE3huqFuZyBUaMOhbmcgOCwgUGjGsOG7nW5nIDExLCBRdeG6rW4gMywgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1564456157755!5m2!1svi!2s" frameborder="0" style="border:0; width:100%; height:400px" allowfullscreen></iframe>
+                </p>
             </div>
-            <!-- Buttons-->
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fas fa-map-marker-alt" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>Ho Chi Minh city, 70000</p>
-                    <p class="mb-md-0">Vietnam</p>
+            <!-- Grid column -->
+            <!-- Grid column Dung-->
+            <div class="col-lg-3 col-md-6 mb-lg-0 mb-5">
+                <div class="avatar mx-auto">
+                    <img src="~/Content/AvatarTeam/Avatar-Dung.png" class="rounded-circle z-depth-1"
+                         alt="Avatar-Dung" style="width:60%">
                 </div>
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fas fa-phone" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>+ 84 234 567 89</p>
-                    <p class="mb-md-0">Mon - Fri, 8:00-22:00</p>
-                </div>
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fa fa-envelope" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>info@eGreeting.com</p>
-                    <p class="mb-0">sale@eGreeting.com</p>
-                </div>
+                <h5 class="font-weight-bold mt-4 mb-3">Bui Duc Dung</h5>
+                <p class="text-uppercase blue-text"><strong>Web developer</strong></p>
+                <p class="grey-text">
+                </p>
             </div>
+            <!-- Grid column -->
+            <!-- Grid column Phuc-->
+            <div class="col-lg-3 col-md-6 mb-md-0 mb-5">
+                <div class="avatar mx-auto">
+                    <img src="~/Content/AvatarTeam/Avatar-Vi.png" class="rounded-circle z-depth-1"
+                         alt="Avatar-Vi" style="width:60%">
+                </div>
+                <h5 class="font-weight-bold mt-4 mb-3">Phuong The Vi</h5>
+                <p class="text-uppercase blue-text"><strong>Web developer</strong></p>
+                <p class="grey-text">
+                </p>
+            </div>
+            <!-- Grid column -->
+            <!-- Grid column Vi-->
+            <div class="col-lg-3 col-md-6">
+                <div class="avatar mx-auto">
+                    <img src="~/Content/AvatarTeam/Avatar-Phuong.jpg" class="rounded-circle z-depth-1"
+                         alt="Avatar-Phuong" style="width:60%">
+                </div>
+                <h5 class="font-weight-bold mt-4 mb-3">Ngo Duy Phuong</h5>
+                <p class="text-uppercase blue-text"><strong>Backend developer</strong></p>
+                <p class="grey-text">
+                </p>
+            </div>
+            <!-- Grid column -->
 
         </div>
-        <!-- Grid column -->
+        <!-- Grid row -->
 
-    </section>
-    <!-- Section: Contact v.1 -->
+    </div>
+</section>
+<!--/.Section Our Team -->
+<!-- Section: Contact v.1 -->
+<section class="team-section text-center my-5">
+
+    <!-- Section heading -->
+    <h2 class="h1-responsive font-weight-bold my-5" style="color: #149c9c !important">Contact Us</h2>
+
+    <!-- Grid column -->
+    <!-- Grid column -->
+    <div class="container">
+
+        <!--Google map-->
+        <div id="map-container-section" class="z-depth-1-half map-container-section mb-4" style="height: 400px">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3257176556144!2d106.6641388146226!3d10.78634619231479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed23ca5d8db%3A0x24d414f45e5a523!2zNTkwIEPDoWNoIE3huqFuZyBUaMOhbmcgOCwgUGjGsOG7nW5nIDExLCBRdeG6rW4gMywgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1564456157755!5m2!1svi!2s" frameborder="0" style="border:0; width:100%; height:400px" allowfullscreen></iframe>
+        </div>
+        <!-- Buttons-->
+        <div class="row text-center">
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fas fa-map-marker-alt" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>Ho Chi Minh city, 70000</p>
+                <p class="mb-md-0">Vietnam</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fas fa-phone" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>+ 84 234 567 89</p>
+                <p class="mb-md-0">Mon - Fri, 8:00-22:00</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fa fa-envelope" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>info@eGreeting.com</p>
+                <p class="mb-0">sale@eGreeting.com</p>
+            </div>
+        </div>
+
+    </div>
+    <!-- Grid column -->
+
+</section>
+<!-- Section: Contact v.1 -->

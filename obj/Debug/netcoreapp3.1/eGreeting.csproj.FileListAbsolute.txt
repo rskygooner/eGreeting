@@ -408,7 +408,6 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateUser.
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\DetailFeedback.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\DetailTransaction.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCard.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditEmailList.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditUser.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Login.cshtml.g.cs
@@ -434,14 +433,11 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\ChangeSubscr
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\CreateTransaction.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\DescriptionPayment.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Edit.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\EditEmailList.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\EditPaymentInfo.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\FeedbackIndex.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Index.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Payment.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Register.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\SubscribeReceive.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\SubscribeSend.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.RazorTargetAssemblyInfo.cache
@@ -453,3 +449,4 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\staticwebassets\eGreeting.Sta
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.dll
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.pdb
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.genruntimeconfig.cache
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.csprojAssemblyReference.cache

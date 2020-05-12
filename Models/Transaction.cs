@@ -32,13 +32,20 @@ namespace eGreeting.Models
         public string Content { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "NameCard cannot more than 50 characters")]
-        public string NameCard { get; set; }
+        public int CardId { get; set; }
 
         [StringLength(50, ErrorMessage = "ImageName cannot more than 50 characters")]
-        public string ImageNameTrans { get; set; }
+        public string TransImage { get; set; }
+
+        [EnumDataType(typeof(SentStatus))]
+        public SentStatus Status { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime TimeSend { get; set; }
+    }
+    public enum SentStatus : byte
+    {
+        Unsent = 0,
+        Sent = 1,
     }
 }

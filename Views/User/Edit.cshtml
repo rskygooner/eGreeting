@@ -15,9 +15,8 @@
     <h4>Update your information</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.UserName)
     @Html.HiddenFor(model => model.Password)
-    @Html.HiddenFor(model => model.RePassword)
 
     <div class="form-group">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -39,7 +38,7 @@
             <div class="col-md-10">
                 @if (Model != null)
                 {
-                    if (Model.Gender)
+                    if (Model.Gender == Gender.Male)
                     {
                         <label><input type="radio" name="Gender" value="true" checked="checked">Male</label><br />
                         <label><input type="radio" name="Gender" value="false">Female</label>

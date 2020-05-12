@@ -15,13 +15,13 @@ namespace eGreeting.Controllers
         private readonly IUserServices _userServices;
         private readonly IPaymentServices _paymentServices;
         private readonly IFeedbackServices _feedbackServices;
-        private readonly IEmailListServices _emailListServices;
+        private readonly ISubscribleServices _emailListServices;
         private readonly ITransactionServices _transactionServices;
         public UserController(ICardServices cardServices,
             IUserServices userServices,
             IPaymentServices paymentServices,
             IFeedbackServices feedbackServices,
-            IEmailListServices emailListServices,
+            ISubscribleServices emailListServices,
             ITransactionServices transactionServices)
         {
             _cardServices = cardServices;
@@ -35,8 +35,8 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var result = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
-                return View(result);
+                var user = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                return View(user);
             }
             Alert("You need login to access this page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
@@ -65,11 +65,6 @@ namespace eGreeting.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (user.Password != user.RePassword)
-                    {
-                        Alert("RePassword does not match", NotificationType.error);
-                        return View();
-                    }
                     var search = _userServices.GetUserByUsername(user.UserName);
                     if (search == null)
                     {
@@ -99,14 +94,15 @@ namespace eGreeting.Controllers
         }
 
         // GET: User/Edit/5
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string username)
         {
             if (IsLoggedIn())
             {
-                if (id > 0)
+                var user = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                if (user.Role == Role.User)
                 {
-                    var edi = _userServices.GetUser(id);
-                    return View(edi);
+                    var edit = _userServices.GetUser(username);
+                    return View(edit);
                 }
                 else
                 {
@@ -122,7 +118,7 @@ namespace eGreeting.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(User user)
         {
-            var search = _userServices.GetUser(user.UserId);
+            var search = _userServices.GetUser(user.UserName);
             if (ModelState.IsValid)
             {
                 _userServices.EditUser(user);
@@ -194,13 +190,7 @@ namespace eGreeting.Controllers
             {
                 if (id > 0)
                 {
-                    var search = _userServices.GetUser(id);
-                    var model = new ChangePassword
-                    {
-                        UserId = id,
-                        OldPassword = search.Password,
-                    };
-                    return View(model);
+                    return View();
                 }
                 else
                 {
@@ -212,32 +202,17 @@ namespace eGreeting.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public IActionResult ChangePassword(User user)
         {
             if (ModelState.IsValid)
             {
-                if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
+                var existUser = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                if (existUser != null)
                 {
-                    Alert("Confirm New Password not match.", NotificationType.error);
-                    return View();
-                }
-                var searchUser = _userServices.GetUser(changePassword.UserId);
-                if (searchUser != null)
-                {
-                    if (searchUser.Password == changePassword.OldPassword)
-                    {
-                        var model = new User
-                        {
-                            UserId = changePassword.UserId,
-                            Password = changePassword.NewPassword,
-                        };
-                        _userServices.ChangePassword(model);
+                    _userServices.ChangePassword(user);
 
-                        Alert("Change Password successfully!!", NotificationType.success);
-                        return RedirectToAction("Index");
-                    }
-                    Alert("Old Password invalid.", NotificationType.warning);
-                    return View();
+                    Alert("Change Password successfully!!", NotificationType.success);
+                    return RedirectToAction("Index");
                 }
                 Alert("Not found this user.", NotificationType.error);
                 return View();
@@ -270,7 +245,7 @@ namespace eGreeting.Controllers
         {
             if (ModelState.IsValid)
             {
-                feedback.DataCreated = DateTime.Now;
+                feedback.DateCreated = DateTime.Now;
                 if (_feedbackServices.CreateFeedback(feedback))
                 {
                     Alert("Send feedback successfully!", NotificationType.success);
@@ -300,7 +275,7 @@ namespace eGreeting.Controllers
                         Alert("You not Register Email List", NotificationType.error);
                         return RedirectToAction("SubscribeSend");
                     }
-                    if (!searchPayment.IsActive)
+                    if (searchPayment.IsActive == Status.Inactive)
                     {
                         Alert("Your Info Payment is not activated. Please contact Administrator by send feedback.", NotificationType.error);
                         return RedirectToAction("FeedbackIndex");
@@ -308,20 +283,19 @@ namespace eGreeting.Controllers
                     else
                     {
                         var searchCard = _cardServices.GetCard(id);
-                        var searchEmailList = _emailListServices.GetEmailListByUsername(searchUser.UserName);
-                        if (searchEmailList == null)
-                        {
-                            Alert("You not register email list to send Card. Please click Subscribe Send Card to register email list.", NotificationType.error);
-                            return RedirectToAction("Index");
-                        }
+                        //var searchEmailList = _emailListServices.GetEmailListByUsername(searchUser.UserName);
+                        //if (searchEmailList == null)
+                        //{
+                        //    Alert("You not register email list to send Card. Please click Subscribe Send Card to register email list.", NotificationType.error);
+                        //    return RedirectToAction("Index");
+                        //}
                         if (searchCard != null)
                         {
                             var model = new Transaction
                             {
-                                NameCard = searchCard.NameCard,
+                                CardId = searchCard.CardId,
                                 Username = HttpContext.Session.GetString("username"),
-                                ImageNameTrans = searchCard.ImageName,
-                                Receiver = searchEmailList.ListEmail
+                                TransImage = searchCard.ImageName,
                             };
                             return View(model);
                         }
@@ -371,7 +345,6 @@ namespace eGreeting.Controllers
                 var searchUser = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
                 var model = new PaymentInfo
                 {
-                    UserId = searchUser.UserId,
                     UserName = searchUser.UserName,
                 };
                 return View(model);
@@ -425,11 +398,11 @@ namespace eGreeting.Controllers
                     return RedirectToAction("Payment", "User");
                 }
                 var search = _userServices.GetUserByUsername(username);
-                if (search.IsSubcribeSend)
-                {
-                    return RedirectToAction("ChangeSubscribeSend");
-                }
-                if (!searchPayment.IsActive)
+                //if (search.IsSubcribeSend)
+                //{
+                //    return RedirectToAction("ChangeSubscribeSend");
+                //}
+                if (searchPayment.IsActive == Status.Inactive)
                 {
                     Alert("You Payment Not Activate. Please Contact Administrator. Thank you.", NotificationType.error);
                     return RedirectToAction("FeedbackIndex", "User");
@@ -456,50 +429,18 @@ namespace eGreeting.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-        //POST: User/ChangeSubscribeSend
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ChangeSubscribeSend(User search)
-        {
-            if (search != null)
-            {
-                if (_userServices.UpdateSubscribeSend(search))
-                {
-                    var searchEmailList = _emailListServices.GetEmailListByUsername(search.UserName);
-                    if (searchEmailList != null)
-                    {
-                        if (_emailListServices.DeleteEmailList(searchEmailList.EmailId))
-                        {
-                            Alert("You are Unsubscribe Send Card successfully", NotificationType.success);
-                            return RedirectToAction("Index", "Home");
-                        }
-                        Alert("Remove Email List failed", NotificationType.error);
-                        return RedirectToAction("Index", "Home");
-                    }
-                    Alert("Not found Email List", NotificationType.error);
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-            Alert("Unsubscribe Send Card failed", NotificationType.error);
-            return RedirectToAction("Index", "Home");
-        }
 
         //GET: User/EditSubscribe/5
-        public IActionResult EditSubscribe(int id)
+        public IActionResult EditSubscribe(string username)
         {
             if (IsLoggedIn())
             {
-                if (id > 0)
+                var search = _userServices.GetUser(username);
+                if (search != null)
                 {
-                    var search = _userServices.GetUser(id);
-                    if (search != null)
-                    {
-                        return View(search);
-                    }
-                    Alert("Not found User", NotificationType.error);
-                    return RedirectToAction("Index");
+                    return View(search);
                 }
-                Alert("UserId invalid", NotificationType.error);
+                Alert("Not found User", NotificationType.error);
                 return RedirectToAction("Index");
             }
             Alert("You need Log in to access this page", NotificationType.warning);
@@ -509,62 +450,27 @@ namespace eGreeting.Controllers
         //POST: User/AddEmailList
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEmailList(EmailList emailList)
+        public IActionResult AddSubscribleList(SubscribeList subscribe)
         {
-            if (emailList.ListEmail != null)
+            if (subscribe.SubscribeEmail != null)
             {
-                string[] email = emailList.ListEmail.Split('\n');
-                if (email.Length < 10 || email.Length > 20)
-                {
-                    Alert("You only input from 10 to 20 emails", NotificationType.error);
-                    return RedirectToAction("SubscribeSend");
-                }
-                if (HttpContext.Session.GetString("username") != null)
-                {
-                    emailList.Username = HttpContext.Session.GetString("username").ToLower();
-                    var search = _emailListServices.SearchEmailListByUsername(emailList.Username);
-                    if (search.Count == 0)
-                    {
-                        if (_emailListServices.CreateEmailList(emailList))
-                        {
-                            var model = new User
-                            {
-                                UserName = emailList.Username,
-                                IsSubcribeSend = true
-                            };
-                            if (_userServices.UpdateSubscribeSend(model))
-                            {
-                                Alert("You are Subscribe Send successfully", NotificationType.success);
-                                return RedirectToAction("Index", "Home");
-                            }
-                            else
-                            {
-                                _emailListServices.DeleteEmailList(emailList.EmailId);
-                                Alert("Subscribe Send Failed. Please contact Administrator", NotificationType.error);
-                                return RedirectToAction("SubscribeSend");
-                            }
-                        }
-                    }
-                    Alert("You has already register Email List", NotificationType.error);
-                    return RedirectToAction("Index", "Home");
-                }
             }
             Alert("Please do not empty fields", NotificationType.error);
             return RedirectToAction("SubscribeSend");
         }
 
         //GET: User/EditEmailList/5
-        public IActionResult EditEmailList(string username)
+        public IActionResult EditSubscribleList(string username)
         {
             if (IsLoggedIn())
             {
                 if (username != null)
                 {
-                    var search = _emailListServices.GetEmailListByUsername(username);
-                    if (search != null)
-                    {
-                        return View(search);
-                    }
+                    //var search = _emailListServices.GetEmailListByUsername(username);
+                    //if (search != null)
+                    //{
+                    //    return View(search);
+                    //}
                     Alert("Not found Email List with this Username", NotificationType.error);
                     return RedirectToAction("Index");
                 }
@@ -573,56 +479,6 @@ namespace eGreeting.Controllers
             }
             Alert("You need Log in to access this page!", NotificationType.warning);
             return RedirectToAction("Login", "Home");
-        }
-
-        //POST: User/EditEmailList
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditEmailList(EmailList editEmailList)
-        {
-            if (editEmailList != null)
-            {
-                var search = _emailListServices.GetEmailList(editEmailList.EmailId);
-                if (search != null)
-                {
-                    editEmailList.ListEmail.Trim();
-                    string[] ListEmail = editEmailList.ListEmail.Split('\n');
-                    if (ListEmail.Length < 10 || ListEmail.Length > 20)
-                    {
-                        Alert("You must be enter from 10 to 20 emails.", NotificationType.error);
-                        return View(search);
-                    }
-                    if (editEmailList == null)
-                    {
-                        if (_emailListServices.DeleteEmailList(editEmailList.EmailId))
-                        {
-                            Alert("Remove email list successfully", NotificationType.success);
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            Alert("Remove email list failed", NotificationType.error);
-                            return View(search);
-                        }
-                    }
-                    else
-                    {
-                        editEmailList.ListEmail = editEmailList.ListEmail.ToString();
-                        if (_emailListServices.EditEmailList(editEmailList))
-                        {
-                            Alert("Update email list successfully", NotificationType.success);
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            Alert("Update email list failed", NotificationType.error);
-                            return View(search);
-                        }
-                    }
-                }
-            }
-            Alert("Model was null. Please try again", NotificationType.error);
-            return RedirectToAction("Index");
         }
 
         //GET: User/SubscribeReceive
@@ -650,17 +506,16 @@ namespace eGreeting.Controllers
             var search = _paymentServices.GetPaymentByUsername(HttpContext.Session.GetString("username").ToLower());
             if (search != null)
             {
-                if (search.IsActive)
+                if (search.IsActive == Status.Active)
                 {
-                    var searchUser = _userServices.GetUser(search.UserId);
+                    var searchUser = _userServices.GetUser(search.UserName);
                     if (searchUser != null)
                     {
-                        searchUser.IsSubcribeReceive = true;
-                        if (_userServices.UpdateSubscribeReceive(searchUser))
-                        {
-                            Alert("Subscribe Daily Receive New Card Successfully", NotificationType.success);
-                            return RedirectToAction("Index", "Home");
-                        }
+                        //if (_userServices.UpdateSubscribeReceive(searchUser))
+                        //{
+                        //    Alert("Subscribe Daily Receive New Card Successfully", NotificationType.success);
+                        //    return RedirectToAction("Index", "Home");
+                        //}
                     }
                     Alert("Not found Username", NotificationType.error);
                     return RedirectToAction("SubscribeReceive");
@@ -672,24 +527,6 @@ namespace eGreeting.Controllers
             return RedirectToAction("Payment");
         }
 
-        //POST: User/UnSubscribeReceive
-        public IActionResult UnSubscribeReceive(User editUser)
-        {
-            var search = _userServices.GetUser(editUser.UserId);
-            if (search != null)
-            {
-                search.IsSubcribeReceive = false;
-                if (_userServices.UpdateSubscribeReceive(search))
-                {
-                    Alert("UnSubscribe daily receive new Cards successfully", NotificationType.success);
-                    return RedirectToAction("Index", "Home");
-                }
-                Alert("UnSubscribe daily receive new Card failed", NotificationType.error);
-                return RedirectToAction("SubscribeReceive");
-            }
-            Alert("Not found Username", NotificationType.error);
-            return RedirectToAction("SubscribeReceive");
-        }
 
         public void Alert(string message, NotificationType notificationType)
         {
