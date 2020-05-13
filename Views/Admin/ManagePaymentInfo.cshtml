@@ -22,7 +22,7 @@
     @foreach (var item in ViewBag.page)
     {
         <tr>
-            <td><a href="/Admin/EditUser/@item.UserId">@item.UserName</a></td>
+            <td>@item.UserName</td>
             <td>@item.BankName</td>
             <td>@item.BankAccount</td>
             <td>@item.DateExpire</td>
@@ -48,7 +48,7 @@
                 }
                 else
                 {
-                    if (item.IsActive)
+                    if (item.IsActive == Status.Active)
                     {
                         <span style="color: green; font-weight: 900">Activated</span>
                     }
@@ -59,7 +59,7 @@
                 }
             </td>
             <td>
-                @if (item.IsActive)
+                @if (item.IsActive == Status.Active)
                 {
                     <input type="button" value="Deactivate" class="btn btn-danger" onClick="Deactive(@item.PayId)" />
                     <a onClick="doDelete(@item.PayId)" href="#" class="btn btn-danger btn-circle">
