@@ -412,13 +412,13 @@ namespace eGreeting.Controllers
 
         // POST: Admin/CreateUser
         [HttpPost]
-        public IActionResult CreateUser(User user)
+        public IActionResult CreateUser(UserViewModel user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var search = _userServices.GetUserByUsername(user.UserName);
+                    var search = _userServices.GetUser(user.UserName);
                     if (search == null)
                     {
                         if (_userServices.CreateUser(user))

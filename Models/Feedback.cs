@@ -26,7 +26,7 @@ namespace eGreeting.Models
         public string Content { get; set; }
 
         [EnumDataType(typeof(Check))]
-        public Check IsChecked { get; set; }
+        public Check IsChecked { get; set; } = Check.Uncheck;
 
         [Required]
         [DataType(DataType.Date)]

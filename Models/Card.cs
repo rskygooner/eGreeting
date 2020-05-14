@@ -23,7 +23,7 @@ namespace eGreeting.Models
         public string ImageName { get; set; }
 
         [EnumDataType(typeof(Status))]
-        public Status IsActive { get; set; }
+        public Status IsActive { get; set; } = Status.Active;
 
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]

@@ -10,9 +10,9 @@ namespace eGreeting.Services
     {
         List<User> GetUsers();
         User GetUser(string username);
+        User CheckExistUser(string username, string email);
         User CheckLogin(User user);
-        User GetUserByUsername(string username);
-        bool CreateUser(User user);
+        bool CreateUser(UserViewModel user);
         bool EditUser(User editUser);
         bool DeleteUser(string username);
         bool ChangePassword(User user);
@@ -38,28 +38,32 @@ namespace eGreeting.Services
             return user;
         }
 
+        public User CheckExistUser(string username, string email)
+        {
+            User user = _dbContext.Users.SingleOrDefault(x => x.UserName == username || x.Email == email);
+            return user;
+        }
+
         public User CheckLogin(User user)
         {
             User userLogin = _dbContext.Users.FirstOrDefault(x => x.UserName == user.UserName && x.Password == user.Password);
             return userLogin;
         }
 
-        public User GetUserByUsername(string username)
+        public bool CreateUser(UserViewModel userView)
         {
-            User user = _dbContext.Users.FirstOrDefault(item => item.UserName == username);
-            return user;
-        }
-
-        public bool CreateUser(User user)
-        {
-            var b = GetUser(user.UserName);
-            if (b == null)
+            var user = new User
             {
-                _dbContext.Users.Add(user);
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
+                UserName = userView.UserName,
+                Password = userView.Password,
+                FullName = userView.FullName,
+                Gender = userView.Gender,
+                Phone = userView.Phone,
+                Email = userView.Email
+            };
+            _dbContext.Add(user);
+            _dbContext.SaveChanges();
+            return true;
         }
 
         public bool EditUser(User editUser)

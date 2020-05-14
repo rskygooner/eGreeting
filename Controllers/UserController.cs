@@ -35,7 +35,7 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var user = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                var user = _userServices.GetUser(HttpContext.Session.GetString("username"));
                 return View(user);
             }
             Alert("You need login to access this page", NotificationType.warning);
@@ -59,18 +59,18 @@ namespace eGreeting.Controllers
         // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(User user)
+        public IActionResult Register(UserViewModel user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var search = _userServices.GetUserByUsername(user.UserName);
+                    var search = _userServices.CheckExistUser(user.UserName , user.Email);
                     if (search == null)
                     {
                         if (_userServices.CreateUser(user))
                         {
-                            Alert("Register Successfully!!", NotificationType.success);
+                            Alert("Register Successfully! Please login", NotificationType.success);
                             HttpContext.Session.SetString("username", user.UserName);
                             HttpContext.Session.SetString("fullname", user.FullName);
                             HttpContext.Session.SetString("role", Role.User.ToString().ToLower());
@@ -79,11 +79,11 @@ namespace eGreeting.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Username is existed");
+                        ModelState.AddModelError("", "Username or email is existed");
                         return View();
                     }
                 }
-                ModelState.AddModelError("", "Create new User failed .");
+                ModelState.AddModelError("", "Create new User failed!");
                 return View();
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var user = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                var user = _userServices.GetUser(HttpContext.Session.GetString("username"));
                 if (user.Role == Role.User)
                 {
                     var edit = _userServices.GetUser(username);
@@ -206,7 +206,7 @@ namespace eGreeting.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existUser = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                var existUser = _userServices.GetUser(HttpContext.Session.GetString("username"));
                 if (existUser != null)
                 {
                     _userServices.ChangePassword(user);
@@ -225,15 +225,11 @@ namespace eGreeting.Controllers
 
 
         // GET: User/CreateFeedback
-        public IActionResult FeedbackIndex()
+        public IActionResult Feedback()
         {
             if (IsLoggedIn())
             {
-                var model = new Feedback
-                {
-                    Username = HttpContext.Session.GetString("username"),
-                };
-                return View(model);
+                return View();
             }
             Alert("You need Log in to access this page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
@@ -241,7 +237,7 @@ namespace eGreeting.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FeedbackIndex(Feedback feedback)
+        public IActionResult Feedback(Feedback feedback)
         {
             if (ModelState.IsValid)
             {
@@ -266,7 +262,7 @@ namespace eGreeting.Controllers
             if (IsLoggedIn())
             {
                 var username = HttpContext.Session.GetString("username");
-                var searchUser = _userServices.GetUserByUsername(username);
+                var searchUser = _userServices.GetUser(username);
                 var searchPayment = _paymentServices.GetPaymentByUsername(username);
                 if (searchPayment != null)
                 {
@@ -342,7 +338,7 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var searchUser = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                var searchUser = _userServices.GetUser(HttpContext.Session.GetString("username"));
                 var model = new PaymentInfo
                 {
                     UserName = searchUser.UserName,
@@ -397,7 +393,7 @@ namespace eGreeting.Controllers
                     Alert("You must register Payment Info to use this feature.", NotificationType.error);
                     return RedirectToAction("Payment", "User");
                 }
-                var search = _userServices.GetUserByUsername(username);
+                var search = _userServices.GetUser(username);
                 //if (search.IsSubcribeSend)
                 //{
                 //    return RedirectToAction("ChangeSubscribeSend");
@@ -418,7 +414,7 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var search = _userServices.GetUserByUsername(HttpContext.Session.GetString("username"));
+                var search = _userServices.GetUser(HttpContext.Session.GetString("username"));
                 if (search != null)
                 {
                     return View(search);
@@ -486,7 +482,7 @@ namespace eGreeting.Controllers
         {
             if (IsLoggedIn())
             {
-                var searchUser = _userServices.GetUserByUsername(HttpContext.Session.GetString("username").ToLower());
+                var searchUser = _userServices.GetUser(HttpContext.Session.GetString("username").ToLower());
                 if (searchUser != null)
                 {
                     return View(searchUser);

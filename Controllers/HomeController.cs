@@ -189,11 +189,9 @@ namespace eGreeting.Controllers
         public IActionResult Logout()
         {
             var username = HttpContext.Session.GetString("username");
-
             if (username != null)
             {
-                HttpContext.Session.SetString("username", null);
-                HttpContext.Session.SetString("role", null);
+                HttpContext.Session.Clear();
                 Alert("You has signed out!", NotificationType.success);
                 return RedirectToAction("Index");
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -44,11 +45,12 @@ namespace eGreeting.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Role")]
         [EnumDataType(typeof(Role))]
+        [DefaultValue(Role.User)]
         public Role Role { get; set; }
 
         [EnumDataType(typeof(Status))]
+        [DefaultValue(Status.Active)]
         public Status IsActive { get; set; }
     }
     public enum Gender : byte
