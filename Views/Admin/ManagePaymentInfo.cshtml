@@ -1,8 +1,9 @@
-﻿@model IEnumerable<eGreeting.Models.PaymentInfo>
-
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "Manage Payment Info";
     Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+    var pageList = (IPagedList)ViewBag.page;
 }
 
 
@@ -18,14 +19,14 @@
         <th>Status</th>
         <th>Action</th>
     </tr>
-    @foreach (var item in Model)
+    @foreach (var item in ViewBag.page)
     {
         <tr>
-            <td><a href="/Admin/EditUser/@item.UserId">@Html.DisplayFor(modelItem => item.UserName)</a></td>
-            <td>@Html.DisplayFor(modelItem => item.BankName)</td>
-            <td>@Html.DisplayFor(modelItem => item.BankAccount)</td>
-            <td>@Html.DisplayFor(modelItem => item.DateExpire)</td>
-            <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
+            <td>@item.UserName</td>
+            <td>@item.BankName</td>
+            <td>@item.BankAccount</td>
+            <td>@item.DateExpire</td>
+            <td>@item.DateCreated</td>
             <td>
                 @if (item.DateCreated != null)
                 {
@@ -47,7 +48,7 @@
                 }
                 else
                 {
-                    if (item.IsActive)
+                    if (item.IsActive == Status.Active)
                     {
                         <span style="color: green; font-weight: 900">Activated</span>
                     }
@@ -58,7 +59,7 @@
                 }
             </td>
             <td>
-                @if (item.IsActive)
+                @if (item.IsActive == Status.Active)
                 {
                     <input type="button" value="Deactivate" class="btn btn-danger" onClick="Deactive(@item.PayId)" />
                     <a onClick="doDelete(@item.PayId)" href="#" class="btn btn-danger btn-circle">
@@ -82,13 +83,15 @@
                             <i style="color: #fff" class="fas fa-trash"></i>
                         </a>
                     }
-
-
                 }
             </td>
         </tr>
     }
 </table>
+
+<div>
+    @Html.PagedListPager(pageList, page => Url.Action("ManagePaymentInfo", new { page }))
+</div>
 
 <script>
     function active(Id) {

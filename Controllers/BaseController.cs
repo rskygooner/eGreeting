@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eGreeting.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace eGreeting.Controllers
             var role = HttpContext.Session.GetString("role");
             if (username != null && role != null)
             {
-                if (role.ToString().ToLower() == "true")
+                if (role == Role.Admin.ToString())
                 {
                     return true;
                 }

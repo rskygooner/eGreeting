@@ -31,8 +31,9 @@ namespace eGreeting
             services.AddDbContext<MariaDBContext>(options => options.UseMySQL(Configuration["ConnectionSetting:MariaDBSettings:ConnectionStrings"]), ServiceLifetime.Transient);
 
             #region Services
+            services.AddScoped<ICategoryServices, CategoryServices>();
             services.AddScoped<ICardServices, CardServices>();
-            services.AddScoped<IEmailListServices, EmailListServices>();
+            services.AddScoped<ISubscribleServices, SubscribleServices>();
             services.AddScoped<IFeedbackServices, FeedbackServices>();
             services.AddScoped<IPaymentServices, PaymentServices>();
             services.AddScoped<ITransactionServices, TransactionServices>();

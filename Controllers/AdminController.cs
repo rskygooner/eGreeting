@@ -5,27 +5,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using eGreeting.Models;
 using eGreeting.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using X.PagedList;
 
 namespace eGreeting.Controllers
 {
     public class AdminController : BaseController
     {
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ICategoryServices _categoryServices;
         private readonly ICardServices _cardServices;
         private readonly IUserServices _userServices;
         private readonly IPaymentServices _paymentServices;
         private readonly IFeedbackServices _feedbackServices;
-        private readonly IEmailListServices _emailListServices;
+        private readonly ISubscribleServices _emailListServices;
         private readonly ITransactionServices _transactionServices;
-        public AdminController(ICardServices cardServices,
+        public AdminController(IWebHostEnvironment environment,
+            ICardServices cardServices,
+            ICategoryServices categoryServices,
             IUserServices userServices,
             IPaymentServices paymentServices,
             IFeedbackServices feedbackServices,
-            IEmailListServices emailListServices,
+            ISubscribleServices emailListServices,
             ITransactionServices transactionServices)
         {
+            _hostingEnvironment = environment;
+            _categoryServices = categoryServices;
             _cardServices = cardServices;
             _userServices = userServices;
             _paymentServices = paymentServices;
@@ -33,6 +41,7 @@ namespace eGreeting.Controllers
             _emailListServices = emailListServices;
             _transactionServices = transactionServices;
         }
+
         public IActionResult Index()
         {
             if (IsLoggedIn())
@@ -62,24 +71,19 @@ namespace eGreeting.Controllers
         // POST: Admin/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(User login)
+        public IActionResult Login(User user)
         {
-            var model = new User
-            {
-                UserName = login.UserName,
-                Password = login.Password
-            };
-            var search = _userServices.CheckLogin(model);
+            var search = _userServices.CheckLogin(user);
             if (search != null)
             {
-                if (!search.Role)
+                if (search.Role == Role.User)
                 {
                     Alert("You are not Administrator. Please do not try login here. Thank you.", NotificationType.warning);
                     return RedirectToAction("Index", "Home");
                 }
                 HttpContext.Session.SetString("username", search.UserName);
                 HttpContext.Session.SetString("fullname", search.FullName);
-                HttpContext.Session.SetString("role", search.Role.ToString().ToLower());
+                HttpContext.Session.SetString("role", search.Role.ToString());
                 return RedirectToAction("Index", "Admin");
             }
             else
@@ -89,35 +93,17 @@ namespace eGreeting.Controllers
             return View();
         }
 
-
-
-        //========================================================= Manage Feedback ===========================================================================
-        [HttpPost]
-        public bool InsertFeedback(Feedback feedback)
-        {
-            try
-            {
-                return _feedbackServices.CreateFeedback(feedback);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-
+        //Manage Feedback//
         // GET: Admin/ManageFeedback
         public IActionResult ManageFeedback(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_feedbackServices.GetAllFeedback());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var feedbacks = _feedbackServices.GetAllFeedback().OrderByDescending(x => x.DateCreated).ToPagedList(pageNum, maxSize);
+                ViewBag.page = feedbacks;
+                return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
@@ -155,30 +141,28 @@ namespace eGreeting.Controllers
             }
         }
 
-        //================================================ Manage Card ====================================================//
-
+        //Manage Card//
         // GET: Admin/ManageCard
         public IActionResult ManageCard(string pName, int? page)
         {
-            var model = _cardServices.GetCards();
             if (IsAdmin())
             {
+                var cards = _cardServices.GetCards();
+                int maxSize = 9;
+                var pageNum = page ?? 1;
                 if (!string.IsNullOrEmpty(pName))
                 {
-                    //seartch by name
-                    model = model.Where(p => p.NameCard.ToUpper().Contains(pName)
-                                        || p.NameCard.ToLower().Contains(pName)).ToList();
-                    //items in page
-                    int pageSize = 9;
-                    int pageNumber = (page ?? 1);
-                    return View(model.ToPagedList(pageNumber, pageSize));
+                    var model = cards.Where(x => x.CardName.Contains(pName.ToLower()) || x.CardName.Contains(pName.ToUpper()))
+                        .OrderBy(x=>x.CardName)
+                        .ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
                 }
                 else
                 {
-                    //items in page
-                    int pageSize = 9;
-                    int pageNumber = (page ?? 1);
-                    return View(model.ToPagedList(pageNumber, pageSize));
+                    var model = cards.OrderBy(x => x.CardName).ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
                 }
             }
             Alert("You not permit to access that page", NotificationType.warning);
@@ -190,6 +174,8 @@ namespace eGreeting.Controllers
         {
             if (IsAdmin())
             {
+                var categoryList = _categoryServices.GetCategories();
+                ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
                 return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
@@ -209,7 +195,7 @@ namespace eGreeting.Controllers
                     {
                         if (file != null && file.Length > 0)
                         {
-                            if (_cardServices.GetNameCard(newCard.NameCard))
+                            if (_cardServices.GetNameCard(newCard.CardName))
                             {
                                 Alert("Namecard has been exist.", NotificationType.error);
                                 return View();
@@ -219,7 +205,7 @@ namespace eGreeting.Controllers
                             if (CheckExtImg(ext))
                             {
                                 var fileName = Path.GetFileName(file.FileName);
-                                //var imagePath = Server.MapPath("~/ImageCard/" + fileName);
+                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath,"ImageCard");
                                 newCard.ImageName = fileName;
                                 newCard.DateCreated = DateTime.Now;
                                 if (_cardServices.GetImageCard(fileName))
@@ -229,6 +215,10 @@ namespace eGreeting.Controllers
                                 }
                                 if (_cardServices.CreateCard(newCard))
                                 {
+                                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                                    {
+                                        file.CopyTo(fileStream);
+                                    }
                                     //file.SaveAs(imagePath);
                                     Alert("Create new Card successfully", NotificationType.success);
                                     return RedirectToAction("ManageCard");
@@ -270,6 +260,8 @@ namespace eGreeting.Controllers
                     var search = _cardServices.GetCard(id);
                     if (search != null)
                     {
+                        var categoryList = _categoryServices.GetCategories();
+                        ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
                         return View(search);
                     }
                     Alert("Cannot get Card", NotificationType.error);
@@ -303,7 +295,7 @@ namespace eGreeting.Controllers
                             if (CheckExtImg(ext))
                             {
                                 var fileName = Path.GetFileName(file.FileName);
-                                //var imagePath = Server.MapPath("~/ImageCard/" + fileName);
+                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "ImageCard");
                                 editCard.ImageName = fileName;
                                 if (editCard.DateCreated == null)
                                 {
@@ -312,6 +304,10 @@ namespace eGreeting.Controllers
 
                                 if (_cardServices.EditCard(editCard))
                                 {
+                                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                                    {
+                                        file.CopyTo(fileStream);
+                                    }
                                     //file.SaveAs(imagePath);
                                     Alert("Update Card successfully", NotificationType.success);
                                     return RedirectToAction("ManageCard");
@@ -387,26 +383,23 @@ namespace eGreeting.Controllers
         }
 
 
-        //================================================ Manage User ====================================================//
-
+        //Manage User//
         // GET: Admin/ManageUser
         public IActionResult ManageUser(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_userServices.GetUsers());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var users = _userServices.GetUsers().OrderBy(x=>x.Role).ToPagedList(pageNum, maxSize);
+                ViewBag.page = users;
+                return View();
             }
             Alert("You not permit to access that page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
         }
 
-        // GET: Admin/CreateCard
+        // GET: Admin/CreateUser
         public IActionResult CreateUser()
         {
             if (IsAdmin())
@@ -417,23 +410,18 @@ namespace eGreeting.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: Admin/CreateCard
+        // POST: Admin/CreateUser
         [HttpPost]
-        public IActionResult CreateUser(User newUser)
+        public IActionResult CreateUser(UserViewModel user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (newUser.Password != newUser.RePassword)
-                    {
-                        Alert("RePassword not match!", NotificationType.error);
-                        return View();
-                    }
-                    var search = _userServices.GetUserByUsername(newUser.UserName);
+                    var search = _userServices.GetUser(user.UserName);
                     if (search == null)
                     {
-                        if (_userServices.CreateUser(newUser))
+                        if (_userServices.CreateUser(user))
                         {
                             Alert("Create User successfully!", NotificationType.success);
                             return RedirectToAction("ManageUser");
@@ -456,11 +444,11 @@ namespace eGreeting.Controllers
         }
 
         // GET: Admin/EditUser
-        public IActionResult EditUser(int id)
+        public IActionResult EditUser(string username)
         {
             try
             {
-                var search = _userServices.GetUser(id);
+                var search = _userServices.GetUser(username);
                 if (search != null)
                 {
                     return View(search);
@@ -479,31 +467,21 @@ namespace eGreeting.Controllers
         // POST: Admin/EditUser
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditUser(User editU)
+        public IActionResult EditUser(User user)
         {
             try
             {
-                var searchUser = _userServices.GetUser(editU.UserId);
+                var searchUser = _userServices.GetUser(user.UserName);
                 if (searchUser == null)
                 {
                     Alert("Not found This User", NotificationType.error);
                     return View();
                 }
-                if (editU.Password != editU.RePassword)
+                if (user.UserName == "admin")
                 {
-                    Alert("Re-Password not match !!!", NotificationType.error);
-                    return View(editU);
+                    user.Role = Role.Admin;
                 }
-                if (editU.Password == null || editU.RePassword == null)
-                {
-                    editU.Password = searchUser.Password;
-                    editU.RePassword = searchUser.RePassword;
-                }
-                if (editU.UserName == "admin")
-                {
-                    editU.Role = true;
-                }
-                if (_userServices.EditUser(editU))
+                if (_userServices.EditUser(user))
                 {
                     Alert("Edit User successfully!", NotificationType.success);
                     return RedirectToAction("ManageUser");
@@ -521,15 +499,13 @@ namespace eGreeting.Controllers
 
         // POST: Admin/Delete/5
         [HttpPost]
-        public IActionResult DeleteUser(int id)
+        public IActionResult DeleteUser(string username)
         {
             try
             {
                 if (IsAdmin())
                 {
-                    if (id >= 0)
-                    {
-                        if (_userServices.DeleteUser(id))
+                        if (_userServices.DeleteUser(username))
                         {
                             Alert("Delete User Successfully .", NotificationType.success);
                             return RedirectToAction("ManageUser");
@@ -538,9 +514,7 @@ namespace eGreeting.Controllers
                         {
                             Alert("Delete error, cannot find this User!!!", NotificationType.error);
                             return RedirectToAction("ManageUser");
-                        }
-                    }
-                    return RedirectToAction("ManageCard");
+                        }                    
                 }
                 Alert("You not permit to access that page", NotificationType.warning);
                 return RedirectToAction("Index", "Home");
@@ -552,75 +526,17 @@ namespace eGreeting.Controllers
             }
         }
 
-        //GET: Admin/EditEmailList/1
-        public IActionResult EditEmailList(int id)
-        {
-            if (IsAdmin())
-            {
-                var search = _userServices.GetUser(id);
-                if (search != null)
-                {
-                    var searchEmail = _emailListServices.GetEmailListByUsername(search.UserName);
-                    if (searchEmail != null)
-                    {
-                        return View(searchEmail);
-                    }
-                    Alert("Cannot found Email List", NotificationType.warning);
-                    return RedirectToAction("ManageUser", "Admin");
-                }
-                Alert("Cannot found User", NotificationType.warning);
-                return RedirectToAction("ManageUser", "Admin");
-            }
-            Alert("You not permit to access that page", NotificationType.warning);
-            return RedirectToAction("Login", "Home");
-        }
-
-        //POST: Admin/EditEmailList
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditEmailList(EmailList emailList)
-        {
-            if (emailList.ListEmail != null)
-            {
-                string[] email = emailList.ListEmail.Split('\n');
-                if (email.Length < 10 || email.Length > 20)
-                {
-                    Alert("You must enter from 10 to 20 email.", NotificationType.error);
-                    return View(emailList);
-                }
-                if (_emailListServices.EditEmailList(emailList))
-                {
-                    Alert("Updating Email List Successfully", NotificationType.success);
-                    return RedirectToAction("ManageUser");
-                }
-                Alert("Updating Email List failed", NotificationType.error);
-                return RedirectToAction("ManageUser");
-            }
-            else
-            {
-                if (_emailListServices.DeleteEmailList(emailList.EmailId))
-                {
-                    Alert("Email List has been removed", NotificationType.success);
-                    return RedirectToAction("ManageUser");
-                }
-                Alert("Removing Email List failed", NotificationType.error);
-                return RedirectToAction("ManageUser");
-            }
-        }
-
-        //================================================ Manage Payment ====================================================//
+        //Manage Payment//
         // GET: /Admin/ManagePaymentInfo
         public IActionResult ManagePaymentInfo(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_paymentServices.GetPayments());
+                int maxSize = 5;
+                var pageNum = page ?? 1;
+                var payments = _paymentServices.GetPayments().OrderByDescending(x=>x.DateCreated).ToPagedList(pageNum, maxSize);
+                ViewBag.page = payments;
+                return View();
             }
             Alert("You not permit to access this page", NotificationType.error);
             return RedirectToAction("Login", "Home");
@@ -634,23 +550,11 @@ namespace eGreeting.Controllers
                 var searchPayment = _paymentServices.GetPayment(id);
                 if (searchPayment != null)
                 {
-                    var searchUser = _userServices.GetUser(searchPayment.UserId);
+                    var searchUser = _userServices.GetUser(searchPayment.UserName);
                     if (searchUser != null)
                     {
-                        if (Boolean.Parse(IsActive))
-                        {
-                            searchUser.IsVIP = true;
-                        }
-                        else
-                        {
-                            searchUser.IsVIP = false;
-                        }
-
-                        if (_userServices.UpdateIsVIP(searchUser))
-                        {
-                            Alert("Change status activation successfully", NotificationType.success);
+                           Alert("Change status activation successfully", NotificationType.success);
                             return RedirectToAction("ManagePaymentInfo");
-                        }
                     }
                     Alert("Cannot found User.", NotificationType.error);
                     return View();
@@ -687,31 +591,29 @@ namespace eGreeting.Controllers
             }
         }
 
-        //================================================ Manage Transaction====================================================//
+        //Manage Transaction//
         // GET: /Admin/ManageTrans
 
         public IActionResult ManageTransaction(int? page)
         {
             if (IsAdmin())
             {
-                if (page == null)
-                {
-                    page = 1;
-                }
-                int pageNumber = (page ?? 1);
-
-                return View(_transactionServices.GetTransactions());
+                int maxSize = 9;
+                var pageNum = page ?? 1;
+                var transactions = _transactionServices.GetTransactions().OrderByDescending(x=>x.TimeSend).ToPagedList(pageNum, maxSize);
+                ViewBag.page = transactions;
+                return View();
             }
             Alert("You not permit to access this page", NotificationType.error);
             return RedirectToAction("Login", "Home");
         }
         public IActionResult DetailTransaction(int id)
         {
-            var s = _transactionServices.GetTransaction(id);
-            return View(s);
+            var transaction = _transactionServices.GetTransaction(id);
+            return View(transaction);
         }
 
-        public IActionResult DeleteTrans(int id)
+        public IActionResult DeleteManageTransaction(int id)
         {
             try
             {

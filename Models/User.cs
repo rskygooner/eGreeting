@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -10,10 +11,6 @@ namespace eGreeting.Models
     public class User
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "User ID")]
-        public int UserId { get; set; }
-
         [Required]
         [StringLength(50, MinimumLength = 3)]
         [Display(Name = "User Name")]
@@ -27,28 +24,14 @@ namespace eGreeting.Models
         public string Password { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 8)]
-        [Display(Name = "RePassword")]
-        [DataType(DataType.Password)]
-        public string RePassword { get; set; }
-
-        [Display(Name = "Role")]
-        public bool Role { get; set; }
-
-        [Display(Name = "Is Subcribe Send")]
-        public bool IsSubcribeSend { get; set; }
-
-        [Display(Name = "Is Subcribe Receive")]
-        public bool IsSubcribeReceive { get; set; }
-
-        [Required]
         [StringLength(50)]
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
         [Required]
         [Display(Name = "Gender")]
-        public bool Gender { get; set; }
+        [EnumDataType(typeof(Gender))]
+        public Gender  Gender { get; set; }
 
         [Required]
         [RegularExpression("[0-9]{8,10}", ErrorMessage = "Phone Number must be from 8 - 10 digits")]
@@ -62,8 +45,27 @@ namespace eGreeting.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        public bool IsVIP { get; set; }
+        [EnumDataType(typeof(Role))]
+        [DefaultValue(Role.User)]
+        public Role Role { get; set; }
 
-        public bool IsDeactive { get; set; }
+        [EnumDataType(typeof(Status))]
+        [DefaultValue(Status.Active)]
+        public Status IsActive { get; set; }
+    }
+    public enum Gender : byte
+    {
+        Female = 0,
+        Male = 1,
+    }
+    public enum Role : byte
+    {
+        Admin = 0,
+        User = 1,
+    }
+    public enum Status : byte
+    {
+        Inactive = 0,
+        Active = 1,
     }
 }

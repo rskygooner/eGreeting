@@ -1,9 +1,9 @@
-﻿@model IEnumerable<eGreeting.Models.Feedback>
-
-
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "ManageFeedback";
     Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
+    var pageList = (IPagedList)ViewBag.page;
 }
 
 
@@ -21,13 +21,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in ViewBag.page)
                     {
                         <tr>
                             <td>@item.Username</td>
                             <td>@item.Subject</td>
                             <td id="Content">@item.Content</td>
-                            <td>@item.DataCreated</td>
+                            <td>@item.DateCreated</td>
                             <td>
 
                                 <a class="btn btn-warning" href="/Admin/DetailFeedback/@item.FeedbackId"><i style="color: #fff" class="fas fa-info"></i></a>
@@ -43,7 +43,9 @@
     </div>
 </div>
 
-
+<div>
+    @Html.PagedListPager(pageList, page => Url.Action("ManageFeedback", new { page }))
+</div>
 
 <script>
     $(document).ready(function () {

@@ -13,8 +13,6 @@ namespace eGreeting.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PayId { get; set; }
 
-        public int UserId { get; set; }
-
         [Required]
         [StringLength(50)]
         public string UserName { get; set; }
@@ -41,6 +39,7 @@ namespace eGreeting.Models
         public DateTime? DateCreated { get; set; }
 
         [Display(Name = "Status Activation")]
-        public bool IsActive { get; set; }
+        [EnumDataType(typeof(Status))]
+        public Status IsActive { get; set; }
     }
 }

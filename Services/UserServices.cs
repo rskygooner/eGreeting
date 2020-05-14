@@ -9,15 +9,12 @@ namespace eGreeting.Services
     public interface IUserServices
     {
         List<User> GetUsers();
-        User GetUser(int id);
+        User GetUser(string username);
+        User CheckExistUser(string username, string email);
         User CheckLogin(User user);
-        User GetUserByUsername(string username);
-        bool CreateUser(User user);
+        bool CreateUser(UserViewModel user);
         bool EditUser(User editUser);
-        bool DeleteUser(int id);
-        bool UpdateIsVIP(User user);
-        bool UpdateSubscribeReceive(User user);
-        bool UpdateSubscribeSend(User user);
+        bool DeleteUser(string username);
         bool ChangePassword(User user);
     }
     public class UserServices : IUserServices
@@ -35,52 +32,52 @@ namespace eGreeting.Services
             return users;
         }
 
-        public User GetUser(int id)
+        public User GetUser(string username)
         {
-            User user = _dbContext.Users.Find(id);
+            User user = _dbContext.Users.Find(username);
+            return user;
+        }
+
+        public User CheckExistUser(string username, string email)
+        {
+            User user = _dbContext.Users.SingleOrDefault(x => x.UserName == username || x.Email == email);
             return user;
         }
 
         public User CheckLogin(User user)
         {
-            User userLogin = _dbContext.Users.FirstOrDefault(item => item.UserName == user.UserName && item.Password == user.Password);
+            User userLogin = _dbContext.Users.FirstOrDefault(x => x.UserName == user.UserName && x.Password == user.Password);
             return userLogin;
         }
 
-        public User GetUserByUsername(string username)
+        public bool CreateUser(UserViewModel userView)
         {
-            User user = _dbContext.Users.FirstOrDefault(item => item.UserName == username);
-            return user;
-        }
-
-        public bool CreateUser(User user)
-        {
-            var b = GetUser(user.UserId);
-            if (b == null)
+            var user = new User
             {
-                _dbContext.Users.Add(user);
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
+                UserName = userView.UserName,
+                Password = userView.Password,
+                FullName = userView.FullName,
+                Gender = userView.Gender,
+                Phone = userView.Phone,
+                Email = userView.Email
+            };
+            _dbContext.Add(user);
+            _dbContext.SaveChanges();
+            return true;
         }
 
         public bool EditUser(User editUser)
         {
-            var b = GetUser(editUser.UserId);
+            var b = GetUser(editUser.UserName);
             if (b != null)
             {
                 b.Password = editUser.Password;
-                b.RePassword = editUser.RePassword;
                 b.Role = editUser.Role;
-                b.IsSubcribeSend = editUser.IsSubcribeSend;
-                b.IsSubcribeReceive = editUser.IsSubcribeReceive;
                 b.FullName = editUser.FullName;
                 b.Gender = editUser.Gender;
                 b.Phone = editUser.Phone;
                 b.Email = editUser.Email;
-                b.IsVIP = editUser.IsVIP;
-                b.IsDeactive = editUser.IsDeactive;
+                b.IsActive = editUser.IsActive;
                 _dbContext.SaveChanges();
                 return true;
             }
@@ -95,7 +92,7 @@ namespace eGreeting.Services
 
         public bool EditUserPaymentInfo(PaymentInfo paymentInfo)
         {
-            var b = GetUserPaymentInfo(paymentInfo.UserId);
+            var b = GetUserPaymentInfo(paymentInfo.PayId);
             if (b != null)
             {
                 b.BankName = paymentInfo.BankName;
@@ -107,48 +104,13 @@ namespace eGreeting.Services
             return false;
         }
 
-        public bool UpdateIsVIP(User user)
-        {
-            var b = GetUser(user.UserId);
-            if (b != null)
-            {
-                b.IsVIP = user.IsVIP;
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
-        }
 
-        public bool UpdateSubscribeReceive(User user)
+        public bool DeleteUser(string username)
         {
-            var b = GetUser(user.UserId);
-            if (b != null)
+            var user = GetUser(username);
+            if (user != null)
             {
-                b.IsSubcribeReceive = user.IsSubcribeReceive;
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public bool UpdateSubscribeSend(User user)
-        {
-            var b = GetUserByUsername(user.UserName);
-            if (b != null)
-            {
-                b.IsSubcribeSend = user.IsSubcribeSend;
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public bool DeleteUser(int id)
-        {
-            var b = GetUser(id);
-            if (b != null)
-            {
-                _dbContext.Users.Remove(b);
+                _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
                 return true;
             }
@@ -157,7 +119,7 @@ namespace eGreeting.Services
 
         public bool ChangePassword(User user)
         {
-            var c = GetUser(user.UserId);
+            var c = GetUser(user.UserName);
             if (c != null)
             {
                 c.Password = user.Password;

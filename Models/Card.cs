@@ -15,12 +15,15 @@ namespace eGreeting.Models
 
         [Required]
         [StringLength(50, ErrorMessage = "NameCard cannot more than 50 characters. ")]
-        public string NameCard { get; set; }
+        public string CardName { get; set; }
 
         [Required]
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
 
         public string ImageName { get; set; }
+
+        [EnumDataType(typeof(Status))]
+        public Status IsActive { get; set; } = Status.Active;
 
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]

@@ -38,32 +38,21 @@ namespace eGreeting.Services
 
         public List<Card> SearchCards(string nameCard)
         {
-            List<Card> cards = _dbContext.Cards.Where(x => x.NameCard.ToLower().Contains(nameCard.ToLower())).ToList();
+            List<Card> cards = _dbContext.Cards.Where(x => x.CardName.ToLower().Contains(nameCard.ToLower())).ToList();
             return cards;
         }
-
 
         public List<Card> GetCardsByCategory(string category)
         {
             if (category != null)
             {
-                List<Card> cards = _dbContext.Cards.Where(x => x.Category.ToLower() == category.ToLower()).ToList();
+                Category cate = _dbContext.Categories.SingleOrDefault(x => x.CategoryName.Equals(category));
+                List<Card> cards = _dbContext.Cards.Where(x => x.CategoryId.Equals(cate.CategoryId)).ToList();
                 return cards;
             }
             return GetCards();
         }
 
-        public static IEnumerable<SelectListItem> GetCategoryList()
-        {
-            var model = new List<SelectListItem>()
-            {
-                new SelectListItem{ Value="", Text="---Select Category---", Selected=true},
-                new SelectListItem{ Value="birthday", Text="Birthday"},
-                new SelectListItem{ Value="newyear", Text="NewYear"},
-                new SelectListItem{ Value="festival", Text="Festival"},
-            };
-            return model;
-        }
 
         public Card GetCard(int id)
         {
@@ -74,7 +63,7 @@ namespace eGreeting.Services
 
         public bool GetNameCard(string nameCard)
         {
-            var check = _dbContext.Cards.Any(x => x.NameCard == nameCard);
+            var check = _dbContext.Cards.Any(x => x.CardName == nameCard);
             return check;
         }
 
@@ -106,15 +95,15 @@ namespace eGreeting.Services
             {
                 if (card.ImageName != null)
                 {
-                    b.NameCard = card.NameCard;
-                    b.Category = card.Category;
+                    b.CardName = card.CardName;
+                    b.CategoryId = card.CategoryId;
                     b.ImageName = card.ImageName;
                     b.DateCreated = card.DateCreated;
                 }
                 else
                 {
-                    b.NameCard = card.NameCard;
-                    b.Category = card.Category;
+                    b.CardName = card.CardName;
+                    b.CategoryId = card.CategoryId;
                     b.DateCreated = card.DateCreated;
                 }
                 _dbContext.SaveChanges();

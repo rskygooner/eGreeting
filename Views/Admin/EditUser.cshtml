@@ -14,7 +14,7 @@
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.UserName)
 
     <div class="form-group">
         @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -33,68 +33,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.RePassword, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.PasswordFor(model => model.RePassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.RePassword, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
         <h5 style="color:#4cbc1f">Note: Leave the Password field blank if you don't want to change the password!</h5>
-    </div>
-
-    @if (Model.UserName != "admin")
-    {
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Role) <p style="display:inline-block; color: red">Admin</p>
-                    @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-    }
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsVIP, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.IsVIP)
-                @Html.ValidationMessageFor(model => model.IsVIP, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsDeactive, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.IsDeactive)
-                @Html.ValidationMessageFor(model => model.IsSubcribeSend, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsSubcribeSend, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.IsSubcribeSend)
-                @Html.ValidationMessageFor(model => model.IsSubcribeSend, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsSubcribeReceive, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.IsSubcribeReceive)
-                @Html.ValidationMessageFor(model => model.IsSubcribeReceive, "", new { @class = "text-danger" })
-            </div>
-        </div>
     </div>
 
     <div class="form-group">

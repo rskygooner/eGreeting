@@ -10,7 +10,8 @@ namespace eGreeting.Models
     {
         public MariaDBContext(DbContextOptions<MariaDBContext> options) : base(options) { }
         public DbSet<Card> Cards { get; set; }
-        public DbSet<EmailList> EmailLists { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubscribeList> SubscribeLists { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<PaymentInfo> PaymentInfos { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -18,70 +19,79 @@ namespace eGreeting.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PaymentInfo>().HasData(new PaymentInfo {PayId = 1, UserId = 2, UserName = "test", BankName = "ACB", BankAccount = 9405123465478545, DateExpire = DateTime.ParseExact("2022-01-12", "yyyy-MM-dd", null) });
-            modelBuilder.Entity<Feedback>().HasData(new Feedback {FeedbackId = 1, Subject = "test", Content = "Hello Handsome Guys", Username = "test", DataCreated = DateTime.Now });
-
-            modelBuilder.Entity<Transaction>().HasData(new Transaction {TransId = 1, Username = "test", Receiver = "receiver@gmail.com", Subject = "Happy Birthday my friend", Content = "Hello your 30! Wish you see many many lucky with this old, happiness and healthy", ImageNameTrans = "b-image1.png", TimeSend = DateTime.Now, NameCard = "Birthday-01" });
             modelBuilder.Entity<User>().HasData(
-                new User {UserId = 1, UserName = "admin", Password = "admin1234", RePassword = "admin1234", FullName = "Admin", Gender = true, Email = "admin@egreeting.com", Phone = "0762327226", Role = true, IsDeactive = false, IsVIP = true },
-                new User {UserId = 2, UserName = "test", Password = "123123123", RePassword = "123123123", FullName = "test", Gender = true, Email = "test@gmail.com", Phone = "0762371254" });
+                new User { UserName = "admin", Password = "admin1234", FullName = "Admin", Gender = Gender.Male, Email = "admin@egreeting.com", Phone = "0762327226", Role = Role.Admin, IsActive = Status.Active },
+                new User { UserName = "user", Password = "123123123", FullName = "Test User", Gender = Gender.Male, Email = "test@gmail.com", Phone = "0762371254", Role = Role.User, IsActive = Status.Active });
+            
+            modelBuilder.Entity<PaymentInfo>().HasData(new PaymentInfo { PayId = 1, UserName = "user", BankName = "ACB", BankAccount = 9405123465478545, DateExpire = DateTime.ParseExact("2022-01-12", "yyyy-MM-dd", null) });
+            
+            modelBuilder.Entity<Feedback>().HasData(new Feedback { FeedbackId = 1, Subject = "user", Content = "Hello Handsome Guys", Username = "user", DateCreated = DateTime.Now });
+
+            modelBuilder.Entity<Transaction>().HasData(new Transaction { TransId = 1, Username = "user", Receiver = "receiver@gmail.com", Subject = "Happy Birthday my friend", Content = "Hello your 30! Wish you see many many lucky with this old, happiness and healthy", TransImage = "b-image1.png", TimeSend = DateTime.Now, CardId = 0 });
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category { CategoryId = 1, CategoryName = "Birthday", IsActive = Status.Active },
+                new Category { CategoryId = 2, CategoryName = "Newyear", IsActive = Status.Active },
+                new Category { CategoryId = 3, CategoryName = "Festival", IsActive = Status.Active }
+                );
+
             modelBuilder.Entity<Card>().HasData(
-                new Card { CardId = 1, NameCard = "Birthday-01", Category = "Birthday", ImageName = "b-image1.png", DateCreated = DateTime.Now },
-                new Card { CardId = 2, NameCard = "Birthday-02", Category = "Birthday", ImageName = "b-image2.png", DateCreated = DateTime.Now },
-                new Card { CardId = 3, NameCard = "Birthday-03", Category = "Birthday", ImageName = "b-image3.png", DateCreated = DateTime.Now },
-                new Card { CardId = 4, NameCard = "Birthday-04", Category = "Birthday", ImageName = "b-image4.png", DateCreated = DateTime.Now },
-                new Card { CardId = 5, NameCard = "Birthday-05", Category = "Birthday", ImageName = "b-image5.png", DateCreated = DateTime.Now },
-                new Card { CardId = 6, NameCard = "Birthday-06", Category = "Birthday", ImageName = "b-image6.png", DateCreated = DateTime.Now },
-                new Card { CardId = 7, NameCard = "Birthday-07", Category = "Birthday", ImageName = "b-image7.png", DateCreated = DateTime.Now },
-                new Card { CardId = 8, NameCard = "Birthday-08", Category = "Birthday", ImageName = "b-image8.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 9, NameCard = "Birthday-09", Category = "Birthday", ImageName = "b-image9.png", DateCreated = DateTime.Now },
-                new Card { CardId = 10, NameCard = "Birthday-10", Category = "Birthday", ImageName = "b-image10.png", DateCreated = DateTime.Now },
-                new Card { CardId = 11, NameCard = "Birthday-11", Category = "Birthday", ImageName = "b-image11.png", DateCreated = DateTime.Now },
-                new Card { CardId = 12, NameCard = "Birthday-12", Category = "Birthday", ImageName = "b-image12.png", DateCreated = DateTime.Now },
-                new Card { CardId = 13, NameCard = "Birthday-13", Category = "Birthday", ImageName = "b-image13.png", DateCreated = DateTime.Now },
-                new Card { CardId = 14, NameCard = "Birthday-14", Category = "Birthday", ImageName = "b-image14.png", DateCreated = DateTime.Now },
-                new Card { CardId = 15, NameCard = "Birthday-15", Category = "Birthday", ImageName = "b-image15.png", DateCreated = DateTime.Now },
-                new Card { CardId = 16, NameCard = "Birthday-16", Category = "Birthday", ImageName = "b-image16.png", DateCreated = DateTime.Now },
-                new Card { CardId = 17, NameCard = "Birthday-17", Category = "Birthday", ImageName = "b-image17.png", DateCreated = DateTime.Now },
-                new Card { CardId = 18, NameCard = "Birthday-18", Category = "Birthday", ImageName = "b-image18.png", DateCreated = DateTime.Now },
+                new Card { CardId = 1, CardName = "Birthday-01", CategoryId = 1, ImageName = "b-image1.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 2, CardName = "Birthday-02", CategoryId = 1, ImageName = "b-image2.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 3, CardName = "Birthday-03", CategoryId = 1, ImageName = "b-image3.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 4, CardName = "Birthday-04", CategoryId = 1, ImageName = "b-image4.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 5, CardName = "Birthday-05", CategoryId = 1, ImageName = "b-image5.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 6, CardName = "Birthday-06", CategoryId = 1, ImageName = "b-image6.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 7, CardName = "Birthday-07", CategoryId = 1, ImageName = "b-image7.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 8, CardName = "Birthday-08", CategoryId = 1, ImageName = "b-image8.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 9, CardName = "Birthday-09", CategoryId = 1, ImageName = "b-image9.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 10, CardName = "Birthday-10", CategoryId = 1, ImageName = "b-image10.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 11, CardName = "Birthday-11", CategoryId = 1, ImageName = "b-image11.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 12, CardName = "Birthday-12", CategoryId = 1, ImageName = "b-image12.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 13, CardName = "Birthday-13", CategoryId = 1, ImageName = "b-image13.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 14, CardName = "Birthday-14", CategoryId = 1, ImageName = "b-image14.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 15, CardName = "Birthday-15", CategoryId = 1, ImageName = "b-image15.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 16, CardName = "Birthday-16", CategoryId = 1, ImageName = "b-image16.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 17, CardName = "Birthday-17", CategoryId = 1, ImageName = "b-image17.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 18, CardName = "Birthday-18", CategoryId = 1, ImageName = "b-image18.png", DateCreated = DateTime.Now },
 
-                new Card { CardId = 54, NameCard = "NewYear-01", Category = "NewYear", ImageName = "n-image1.png", DateCreated = DateTime.Now },
-                new Card { CardId = 19, NameCard = "NewYear-02", Category = "NewYear", ImageName = "n-image2.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 20, NameCard = "NewYear-03", Category = "NewYear", ImageName = "n-image3.png", DateCreated = DateTime.Now },
-                new Card { CardId = 21, NameCard = "NewYear-04", Category = "NewYear", ImageName = "n-image4.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 22, NameCard = "NewYear-05", Category = "NewYear", ImageName = "n-image5.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 23, NameCard = "NewYear-06", Category = "NewYear", ImageName = "n-image6.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 24, NameCard = "NewYear-07", Category = "NewYear", ImageName = "n-image7.png", DateCreated = DateTime.Now },
-                new Card { CardId = 25, NameCard = "NewYear-08", Category = "NewYear", ImageName = "n-image8.png", DateCreated = DateTime.Now },
-                new Card { CardId = 26, NameCard = "NewYear-09", Category = "NewYear", ImageName = "n-image9.png", DateCreated = DateTime.Now },
-                new Card { CardId = 27, NameCard = "NewYear-10", Category = "NewYear", ImageName = "n-image10.png", DateCreated = DateTime.Now },
-                new Card { CardId = 28, NameCard = "NewYear-11", Category = "NewYear", ImageName = "n-image11.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 29, NameCard = "NewYear-12", Category = "NewYear", ImageName = "n-image12.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 30, NameCard = "NewYear-13", Category = "NewYear", ImageName = "n-image13.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 31, NameCard = "NewYear-14", Category = "NewYear", ImageName = "n-image14.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 32, NameCard = "NewYear-15", Category = "NewYear", ImageName = "n-image15.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 33, NameCard = "NewYear-16", Category = "NewYear", ImageName = "n-image16.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 34, NameCard = "NewYear-17", Category = "NewYear", ImageName = "n-image17.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 35, NameCard = "NewYear-18", Category = "NewYear", ImageName = "n-image18.jpg", DateCreated = DateTime.Now },
+                new Card { CardId = 54, CardName = "NewYear-01", CategoryId = 2, ImageName = "n-image1.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 19, CardName = "NewYear-02", CategoryId = 2, ImageName = "n-image2.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 20, CardName = "NewYear-03", CategoryId = 2, ImageName = "n-image3.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 21, CardName = "NewYear-04", CategoryId = 2, ImageName = "n-image4.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 22, CardName = "NewYear-05", CategoryId = 2, ImageName = "n-image5.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 23, CardName = "NewYear-06", CategoryId = 2, ImageName = "n-image6.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 24, CardName = "NewYear-07", CategoryId = 2, ImageName = "n-image7.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 25, CardName = "NewYear-08", CategoryId = 2, ImageName = "n-image8.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 26, CardName = "NewYear-09", CategoryId = 2, ImageName = "n-image9.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 27, CardName = "NewYear-10", CategoryId = 2, ImageName = "n-image10.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 28, CardName = "NewYear-11", CategoryId = 2, ImageName = "n-image11.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 29, CardName = "NewYear-12", CategoryId = 2, ImageName = "n-image12.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 30, CardName = "NewYear-13", CategoryId = 2, ImageName = "n-image13.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 31, CardName = "NewYear-14", CategoryId = 2, ImageName = "n-image14.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 32, CardName = "NewYear-15", CategoryId = 2, ImageName = "n-image15.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 33, CardName = "NewYear-16", CategoryId = 2, ImageName = "n-image16.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 34, CardName = "NewYear-17", CategoryId = 2, ImageName = "n-image17.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 35, CardName = "NewYear-18", CategoryId = 2, ImageName = "n-image18.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
 
-                new Card { CardId = 36, NameCard = "Festival-01", Category = "Festival", ImageName = "f-image1.png", DateCreated = DateTime.Now },
-                new Card { CardId = 37, NameCard = "Festival-02", Category = "Festival", ImageName = "f-image2.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 38, NameCard = "Festival-03", Category = "Festival", ImageName = "f-image3.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 39, NameCard = "Festival-04", Category = "Festival", ImageName = "f-image4.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 40, NameCard = "Festival-05", Category = "Festival", ImageName = "f-image5.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 41, NameCard = "Festival-06", Category = "Festival", ImageName = "f-image6.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 42, NameCard = "Festival-07", Category = "Festival", ImageName = "f-image7.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 43, NameCard = "Festival-08", Category = "Festival", ImageName = "f-image8.png", DateCreated = DateTime.Now },
-                new Card { CardId = 44, NameCard = "Festival-09", Category = "Festival", ImageName = "f-image9.png", DateCreated = DateTime.Now },
-                new Card { CardId = 45, NameCard = "Festival-10", Category = "Festival", ImageName = "f-image10.png", DateCreated = DateTime.Now },
-                new Card { CardId = 46, NameCard = "Festival-11", Category = "Festival", ImageName = "f-image11.png", DateCreated = DateTime.Now },
-                new Card { CardId = 47, NameCard = "Festival-12", Category = "Festival", ImageName = "f-image12.png", DateCreated = DateTime.Now },
-                new Card { CardId = 48, NameCard = "Festival-13", Category = "Festival", ImageName = "f-image13.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 49, NameCard = "Festival-14", Category = "Festival", ImageName = "f-image14.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 50, NameCard = "Festival-15", Category = "Festival", ImageName = "f-image15.png", DateCreated = DateTime.Now },
-                new Card { CardId = 51, NameCard = "Festival-16", Category = "Festival", ImageName = "f-image16.jpg", DateCreated = DateTime.Now },
-                new Card { CardId = 52, NameCard = "Festival-17", Category = "Festival", ImageName = "f-image17.png", DateCreated = DateTime.Now },
-                new Card { CardId = 53, NameCard = "Festival-18", Category = "Festival", ImageName = "f-image18.jpg", DateCreated = DateTime.Now });
+                new Card { CardId = 36, CardName = "Festival-01", CategoryId = 3, ImageName = "f-image1.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 37, CardName = "Festival-02", CategoryId = 3, ImageName = "f-image2.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 38, CardName = "Festival-03", CategoryId = 3, ImageName = "f-image3.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 39, CardName = "Festival-04", CategoryId = 3, ImageName = "f-image4.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 40, CardName = "Festival-05", CategoryId = 3, ImageName = "f-image5.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 41, CardName = "Festival-06", CategoryId = 3, ImageName = "f-image6.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 42, CardName = "Festival-07", CategoryId = 3, ImageName = "f-image7.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 43, CardName = "Festival-08", CategoryId = 3, ImageName = "f-image8.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 44, CardName = "Festival-09", CategoryId = 3, ImageName = "f-image9.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 45, CardName = "Festival-10", CategoryId = 3, ImageName = "f-image10.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 46, CardName = "Festival-11", CategoryId = 3, ImageName = "f-image11.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 47, CardName = "Festival-12", CategoryId = 3, ImageName = "f-image12.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 48, CardName = "Festival-13", CategoryId = 3, ImageName = "f-image13.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 49, CardName = "Festival-14", CategoryId = 3, ImageName = "f-image14.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 50, CardName = "Festival-15", CategoryId = 3, ImageName = "f-image15.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 51, CardName = "Festival-16", CategoryId = 3, ImageName = "f-image16.jpg", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 52, CardName = "Festival-17", CategoryId = 3, ImageName = "f-image17.png", IsActive = Status.Active, DateCreated = DateTime.Now },
+                new Card { CardId = 53, CardName = "Festival-18", CategoryId = 3, ImageName = "f-image18.jpg", IsActive = Status.Active, DateCreated = DateTime.Now });
         }
 
     }

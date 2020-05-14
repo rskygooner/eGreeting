@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 09, 2020 lúc 09:29 AM
+-- Thời gian đã tạo: Th5 13, 2020 lúc 07:22 AM
 -- Phiên bản máy phục vụ: 10.4.10-MariaDB
 -- Phiên bản PHP: 7.3.12
 
@@ -30,9 +30,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cards` (
   `CardId` int(11) NOT NULL,
-  `NameCard` varchar(50) NOT NULL,
-  `Category` text NOT NULL,
+  `CardName` varchar(50) NOT NULL,
+  `CategoryId` int(11) NOT NULL,
   `ImageName` text DEFAULT NULL,
+  `IsActive` tinyint(4) NOT NULL,
   `DateCreated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -40,73 +41,82 @@ CREATE TABLE `cards` (
 -- Đang đổ dữ liệu cho bảng `cards`
 --
 
-INSERT INTO `cards` (`CardId`, `NameCard`, `Category`, `ImageName`, `DateCreated`) VALUES
-(1, 'Birthday-01', 'Birthday', 'b-image1.png', '2020-05-07 16:44:39'),
-(2, 'Birthday-02', 'Birthday', 'b-image2.png', '2020-05-07 16:44:39'),
-(3, 'Birthday-03', 'Birthday', 'b-image3.png', '2020-05-07 16:44:39'),
-(4, 'Birthday-04', 'Birthday', 'b-image4.png', '2020-05-07 16:44:39'),
-(5, 'Birthday-05', 'Birthday', 'b-image5.png', '2020-05-07 16:44:39'),
-(6, 'Birthday-06', 'Birthday', 'b-image6.png', '2020-05-07 16:44:39'),
-(7, 'Birthday-07', 'Birthday', 'b-image7.png', '2020-05-07 16:44:39'),
-(8, 'Birthday-08', 'Birthday', 'b-image8.jpg', '2020-05-07 16:44:39'),
-(9, 'Birthday-09', 'Birthday', 'b-image9.png', '2020-05-07 16:44:39'),
-(10, 'Birthday-10', 'Birthday', 'b-image10.png', '2020-05-07 16:44:39'),
-(11, 'Birthday-11', 'Birthday', 'b-image11.png', '2020-05-07 16:44:39'),
-(12, 'Birthday-12', 'Birthday', 'b-image12.png', '2020-05-07 16:44:39'),
-(13, 'Birthday-13', 'Birthday', 'b-image13.png', '2020-05-07 16:44:39'),
-(14, 'Birthday-14', 'Birthday', 'b-image14.png', '2020-05-07 16:44:39'),
-(15, 'Birthday-15', 'Birthday', 'b-image15.png', '2020-05-07 16:44:39'),
-(16, 'Birthday-16', 'Birthday', 'b-image16.png', '2020-05-07 16:44:39'),
-(17, 'Birthday-17', 'Birthday', 'b-image17.png', '2020-05-07 16:44:39'),
-(18, 'Birthday-18', 'Birthday', 'b-image18.png', '2020-05-07 16:44:39'),
-(19, 'NewYear-02', 'NewYear', 'n-image2.jpg', '2020-05-07 16:44:39'),
-(20, 'NewYear-03', 'NewYear', 'n-image3.png', '2020-05-07 16:44:39'),
-(21, 'NewYear-04', 'NewYear', 'n-image4.jpg', '2020-05-07 16:44:39'),
-(22, 'NewYear-05', 'NewYear', 'n-image5.jpg', '2020-05-07 16:44:39'),
-(23, 'NewYear-06', 'NewYear', 'n-image6.jpg', '2020-05-07 16:44:39'),
-(24, 'NewYear-07', 'NewYear', 'n-image7.png', '2020-05-07 16:44:39'),
-(25, 'NewYear-08', 'NewYear', 'n-image8.png', '2020-05-07 16:44:39'),
-(26, 'NewYear-09', 'NewYear', 'n-image9.png', '2020-05-07 16:44:39'),
-(27, 'NewYear-10', 'NewYear', 'n-image10.png', '2020-05-07 16:44:39'),
-(28, 'NewYear-11', 'NewYear', 'n-image11.jpg', '2020-05-07 16:44:39'),
-(29, 'NewYear-12', 'NewYear', 'n-image12.jpg', '2020-05-07 16:44:39'),
-(30, 'NewYear-13', 'NewYear', 'n-image13.jpg', '2020-05-07 16:44:39'),
-(31, 'NewYear-14', 'NewYear', 'n-image14.jpg', '2020-05-07 16:44:39'),
-(32, 'NewYear-15', 'NewYear', 'n-image15.jpg', '2020-05-07 16:44:39'),
-(33, 'NewYear-16', 'NewYear', 'n-image16.jpg', '2020-05-07 16:44:39'),
-(34, 'NewYear-17', 'NewYear', 'n-image17.jpg', '2020-05-07 16:44:39'),
-(35, 'NewYear-18', 'NewYear', 'n-image18.jpg', '2020-05-07 16:44:39'),
-(36, 'Festival-01', 'Festival', 'f-image1.png', '2020-05-07 16:44:39'),
-(37, 'Festival-02', 'Festival', 'f-image2.jpg', '2020-05-07 16:44:39'),
-(38, 'Festival-03', 'Festival', 'f-image3.jpg', '2020-05-07 16:44:39'),
-(39, 'Festival-04', 'Festival', 'f-image4.jpg', '2020-05-07 16:44:39'),
-(40, 'Festival-05', 'Festival', 'f-image5.jpg', '2020-05-07 16:44:39'),
-(41, 'Festival-06', 'Festival', 'f-image6.jpg', '2020-05-07 16:44:39'),
-(42, 'Festival-07', 'Festival', 'f-image7.jpg', '2020-05-07 16:44:39'),
-(43, 'Festival-08', 'Festival', 'f-image8.png', '2020-05-07 16:44:39'),
-(44, 'Festival-09', 'Festival', 'f-image9.png', '2020-05-07 16:44:39'),
-(45, 'Festival-10', 'Festival', 'f-image10.png', '2020-05-07 16:44:39'),
-(46, 'Festival-11', 'Festival', 'f-image11.png', '2020-05-07 16:44:39'),
-(47, 'Festival-12', 'Festival', 'f-image12.png', '2020-05-07 16:44:39'),
-(48, 'Festival-13', 'Festival', 'f-image13.jpg', '2020-05-07 16:44:39'),
-(49, 'Festival-14', 'Festival', 'f-image14.jpg', '2020-05-07 16:44:39'),
-(50, 'Festival-15', 'Festival', 'f-image15.png', '2020-05-07 16:44:39'),
-(51, 'Festival-16', 'Festival', 'f-image16.jpg', '2020-05-07 16:44:39'),
-(52, 'Festival-17', 'Festival', 'f-image17.png', '2020-05-07 16:44:39'),
-(53, 'Festival-18', 'Festival', 'f-image18.jpg', '2020-05-07 16:44:39'),
-(54, 'NewYear-01', 'NewYear', 'n-image1.png', '2020-05-07 16:44:39');
+INSERT INTO `cards` (`CardId`, `CardName`, `CategoryId`, `ImageName`, `IsActive`, `DateCreated`) VALUES
+(1, 'Birthday-01', 1, 'b-image1.png', 1, '2020-05-12 17:01:49'),
+(2, 'Birthday-02', 1, 'b-image2.png', 1, '2020-05-12 17:01:49'),
+(3, 'Birthday-03', 1, 'b-image3.png', 1, '2020-05-12 17:01:49'),
+(4, 'Birthday-04', 1, 'b-image4.png', 1, '2020-05-12 17:01:49'),
+(5, 'Birthday-05', 1, 'b-image5.png', 1, '2020-05-12 17:01:49'),
+(6, 'Birthday-06', 1, 'b-image6.png', 1, '2020-05-12 17:01:49'),
+(7, 'Birthday-07', 1, 'b-image7.png', 1, '2020-05-12 17:01:49'),
+(8, 'Birthday-08', 1, 'b-image8.jpg', 1, '2020-05-12 17:01:49'),
+(9, 'Birthday-09', 1, 'b-image9.png', 1, '2020-05-12 17:01:49'),
+(10, 'Birthday-10', 1, 'b-image10.png', 1, '2020-05-12 17:01:49'),
+(11, 'Birthday-11', 1, 'b-image11.png', 1, '2020-05-12 17:01:49'),
+(12, 'Birthday-12', 1, 'b-image12.png', 1, '2020-05-12 17:01:49'),
+(13, 'Birthday-13', 1, 'b-image13.png', 1, '2020-05-12 17:01:49'),
+(14, 'Birthday-14', 1, 'b-image14.png', 1, '2020-05-12 17:01:49'),
+(15, 'Birthday-15', 1, 'b-image15.png', 1, '2020-05-12 17:01:49'),
+(16, 'Birthday-16', 1, 'b-image16.png', 1, '2020-05-12 17:01:49'),
+(17, 'Birthday-17', 1, 'b-image17.png', 1, '2020-05-12 17:01:49'),
+(18, 'Birthday-18', 1, 'b-image18.png', 0, '2020-05-12 17:01:49'),
+(19, 'NewYear-02', 2, 'n-image2.jpg', 1, '2020-05-12 17:01:49'),
+(20, 'NewYear-03', 2, 'n-image3.png', 1, '2020-05-12 17:01:49'),
+(21, 'NewYear-04', 2, 'n-image4.jpg', 1, '2020-05-12 17:01:49'),
+(22, 'NewYear-05', 2, 'n-image5.jpg', 1, '2020-05-12 17:01:49'),
+(23, 'NewYear-06', 2, 'n-image6.jpg', 1, '2020-05-12 17:01:49'),
+(24, 'NewYear-07', 2, 'n-image7.png', 1, '2020-05-12 17:01:49'),
+(25, 'NewYear-08', 2, 'n-image8.png', 1, '2020-05-12 17:01:49'),
+(26, 'NewYear-09', 2, 'n-image9.png', 1, '2020-05-12 17:01:49'),
+(27, 'NewYear-10', 2, 'n-image10.png', 1, '2020-05-12 17:01:49'),
+(28, 'NewYear-11', 2, 'n-image11.jpg', 1, '2020-05-12 17:01:49'),
+(29, 'NewYear-12', 2, 'n-image12.jpg', 1, '2020-05-12 17:01:49'),
+(30, 'NewYear-13', 2, 'n-image13.jpg', 1, '2020-05-12 17:01:49'),
+(31, 'NewYear-14', 2, 'n-image14.jpg', 1, '2020-05-12 17:01:49'),
+(32, 'NewYear-15', 2, 'n-image15.jpg', 1, '2020-05-12 17:01:49'),
+(33, 'NewYear-16', 2, 'n-image16.jpg', 1, '2020-05-12 17:01:49'),
+(34, 'NewYear-17', 2, 'n-image17.jpg', 1, '2020-05-12 17:01:49'),
+(35, 'NewYear-18', 2, 'n-image18.jpg', 1, '2020-05-12 17:01:49'),
+(36, 'Festival-01', 3, 'f-image1.png', 1, '2020-05-12 17:01:49'),
+(37, 'Festival-02', 3, 'f-image2.jpg', 1, '2020-05-12 17:01:49'),
+(38, 'Festival-03', 3, 'f-image3.jpg', 1, '2020-05-12 17:01:49'),
+(39, 'Festival-04', 3, 'f-image4.jpg', 1, '2020-05-12 17:01:49'),
+(40, 'Festival-05', 3, 'f-image5.jpg', 1, '2020-05-12 17:01:49'),
+(41, 'Festival-06', 3, 'f-image6.jpg', 1, '2020-05-12 17:01:49'),
+(42, 'Festival-07', 3, 'f-image7.jpg', 1, '2020-05-12 17:01:49'),
+(43, 'Festival-08', 3, 'f-image8.png', 1, '2020-05-12 17:01:49'),
+(44, 'Festival-09', 3, 'f-image9.png', 1, '2020-05-12 17:01:49'),
+(45, 'Festival-10', 3, 'f-image10.png', 1, '2020-05-12 17:01:49'),
+(46, 'Festival-11', 3, 'f-image11.png', 1, '2020-05-12 17:01:49'),
+(47, 'Festival-12', 3, 'f-image12.png', 1, '2020-05-12 17:01:49'),
+(48, 'Festival-13', 3, 'f-image13.jpg', 1, '2020-05-12 17:01:49'),
+(49, 'Festival-14', 3, 'f-image14.jpg', 1, '2020-05-12 17:01:49'),
+(50, 'Festival-15', 3, 'f-image15.png', 1, '2020-05-12 17:01:49'),
+(51, 'Festival-16', 3, 'f-image16.jpg', 1, '2020-05-12 17:01:49'),
+(52, 'Festival-17', 3, 'f-image17.png', 1, '2020-05-12 17:01:49'),
+(53, 'Festival-18', 3, 'f-image18.jpg', 1, '2020-05-12 17:01:49'),
+(54, 'NewYear-01', 2, 'n-image1.png', 1, '2020-05-12 17:01:49');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `emaillists`
+-- Cấu trúc bảng cho bảng `categories`
 --
 
-CREATE TABLE `emaillists` (
-  `EmailId` int(11) NOT NULL,
-  `Username` text NOT NULL,
-  `ListEmail` text NOT NULL
+CREATE TABLE `categories` (
+  `CategoryId` int(11) NOT NULL,
+  `CategoryName` varchar(50) NOT NULL,
+  `IsActive` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `categories`
+--
+
+INSERT INTO `categories` (`CategoryId`, `CategoryName`, `IsActive`) VALUES
+(1, 'Birthday', 1),
+(2, 'Newyear', 1),
+(3, 'Festival', 1);
 
 -- --------------------------------------------------------
 
@@ -119,15 +129,16 @@ CREATE TABLE `feedbacks` (
   `Username` varchar(50) NOT NULL,
   `Subject` varchar(50) NOT NULL,
   `Content` varchar(1000) NOT NULL,
-  `DataCreated` datetime NOT NULL
+  `IsChecked` tinyint(4) NOT NULL,
+  `DateCreated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `feedbacks`
 --
 
-INSERT INTO `feedbacks` (`FeedbackId`, `Username`, `Subject`, `Content`, `DataCreated`) VALUES
-(1, 'test', 'test', 'Hello Handsome Guys', '2020-05-07 16:44:39');
+INSERT INTO `feedbacks` (`FeedbackId`, `Username`, `Subject`, `Content`, `IsChecked`, `DateCreated`) VALUES
+(1, 'user', 'user', 'Hello Handsome Guys', 0, '2020-05-12 17:01:49');
 
 -- --------------------------------------------------------
 
@@ -137,21 +148,32 @@ INSERT INTO `feedbacks` (`FeedbackId`, `Username`, `Subject`, `Content`, `DataCr
 
 CREATE TABLE `paymentinfos` (
   `PayId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
   `UserName` varchar(50) NOT NULL,
   `BankName` varchar(50) NOT NULL,
   `BankAccount` bigint(20) NOT NULL,
   `DateExpire` datetime NOT NULL,
   `DateCreated` datetime DEFAULT NULL,
-  `IsActive` bit(1) NOT NULL
+  `IsActive` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `paymentinfos`
 --
 
-INSERT INTO `paymentinfos` (`PayId`, `UserId`, `UserName`, `BankName`, `BankAccount`, `DateExpire`, `DateCreated`, `IsActive`) VALUES
-(1, 2, 'test', 'ACB', 9405123465478545, '2022-01-12 00:00:00', NULL, b'0');
+INSERT INTO `paymentinfos` (`PayId`, `UserName`, `BankName`, `BankAccount`, `DateExpire`, `DateCreated`, `IsActive`) VALUES
+(1, 'user', 'ACB', 9405123465478545, '2022-01-12 00:00:00', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `subscribelists`
+--
+
+CREATE TABLE `subscribelists` (
+  `SubscribeId` int(11) NOT NULL,
+  `Username` varchar(50) NOT NULL,
+  `SubscribeEmail` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -165,8 +187,9 @@ CREATE TABLE `transactions` (
   `Receiver` varchar(50) NOT NULL,
   `Subject` varchar(100) NOT NULL,
   `Content` varchar(1000) NOT NULL,
-  `NameCard` varchar(50) NOT NULL,
-  `ImageNameTrans` varchar(50) DEFAULT NULL,
+  `CardId` int(11) NOT NULL,
+  `TransImage` varchar(50) DEFAULT NULL,
+  `Status` tinyint(4) NOT NULL,
   `TimeSend` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -174,8 +197,8 @@ CREATE TABLE `transactions` (
 -- Đang đổ dữ liệu cho bảng `transactions`
 --
 
-INSERT INTO `transactions` (`TransId`, `Username`, `Receiver`, `Subject`, `Content`, `NameCard`, `ImageNameTrans`, `TimeSend`) VALUES
-(1, 'test', 'receiver@gmail.com', 'Happy Birthday my friend', 'Hello your 30! Wish you see many many lucky with this old, happiness and healthy', 'Birthday-01', 'b-image1.png', '2020-05-07 16:44:39');
+INSERT INTO `transactions` (`TransId`, `Username`, `Receiver`, `Subject`, `Content`, `CardId`, `TransImage`, `Status`, `TimeSend`) VALUES
+(1, 'user', 'receiver@gmail.com', 'Happy Birthday my friend', 'Hello your 30! Wish you see many many lucky with this old, happiness and healthy', 0, 'b-image1.png', 0, '2020-05-12 17:01:49');
 
 -- --------------------------------------------------------
 
@@ -184,28 +207,23 @@ INSERT INTO `transactions` (`TransId`, `Username`, `Receiver`, `Subject`, `Conte
 --
 
 CREATE TABLE `users` (
-  `UserId` int(11) NOT NULL,
   `UserName` varchar(50) NOT NULL,
   `Password` varchar(50) NOT NULL,
-  `RePassword` varchar(50) NOT NULL,
-  `Role` bit(1) NOT NULL,
-  `IsSubcribeSend` bit(1) NOT NULL,
-  `IsSubcribeReceive` bit(1) NOT NULL,
   `FullName` varchar(50) NOT NULL,
-  `Gender` bit(1) NOT NULL,
+  `Gender` tinyint(4) NOT NULL,
   `Phone` text NOT NULL,
   `Email` varchar(50) NOT NULL,
-  `IsVIP` bit(1) NOT NULL,
-  `IsDeactive` bit(1) NOT NULL
+  `Role` tinyint(4) NOT NULL,
+  `IsActive` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`UserId`, `UserName`, `Password`, `RePassword`, `Role`, `IsSubcribeSend`, `IsSubcribeReceive`, `FullName`, `Gender`, `Phone`, `Email`, `IsVIP`, `IsDeactive`) VALUES
-(1, 'admin', 'admin1234', 'admin1234', b'1', b'0', b'0', 'Admin', b'1', '0762327226', 'admin@egreeting.com', b'1', b'0'),
-(2, 'test', '123123123', '123123123', b'0', b'0', b'0', 'test', b'1', '0762371254', 'test@gmail.com', b'0', b'0');
+INSERT INTO `users` (`UserName`, `Password`, `FullName`, `Gender`, `Phone`, `Email`, `Role`, `IsActive`) VALUES
+('admin', 'admin1234', 'Admin', 1, '0762327226', 'admin@egreeting.com', 0, 1),
+('user', '123123123', 'Test User', 1, '0762371254', 'test@gmail.com', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -223,7 +241,7 @@ CREATE TABLE `__efmigrationshistory` (
 --
 
 INSERT INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
-('20200507094440_InitialMigration', '3.1.3');
+('20200512100150_InitialMigration', '3.1.3');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -236,10 +254,10 @@ ALTER TABLE `cards`
   ADD PRIMARY KEY (`CardId`);
 
 --
--- Chỉ mục cho bảng `emaillists`
+-- Chỉ mục cho bảng `categories`
 --
-ALTER TABLE `emaillists`
-  ADD PRIMARY KEY (`EmailId`);
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`CategoryId`);
 
 --
 -- Chỉ mục cho bảng `feedbacks`
@@ -254,6 +272,12 @@ ALTER TABLE `paymentinfos`
   ADD PRIMARY KEY (`PayId`);
 
 --
+-- Chỉ mục cho bảng `subscribelists`
+--
+ALTER TABLE `subscribelists`
+  ADD PRIMARY KEY (`SubscribeId`);
+
+--
 -- Chỉ mục cho bảng `transactions`
 --
 ALTER TABLE `transactions`
@@ -263,7 +287,7 @@ ALTER TABLE `transactions`
 -- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`UserId`);
+  ADD PRIMARY KEY (`UserName`);
 
 --
 -- Chỉ mục cho bảng `__efmigrationshistory`
@@ -279,13 +303,13 @@ ALTER TABLE `__efmigrationshistory`
 -- AUTO_INCREMENT cho bảng `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `CardId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `CardId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
--- AUTO_INCREMENT cho bảng `emaillists`
+-- AUTO_INCREMENT cho bảng `categories`
 --
-ALTER TABLE `emaillists`
-  MODIFY `EmailId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `categories`
+  MODIFY `CategoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `feedbacks`
@@ -300,16 +324,16 @@ ALTER TABLE `paymentinfos`
   MODIFY `PayId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT cho bảng `subscribelists`
+--
+ALTER TABLE `subscribelists`
+  MODIFY `SubscribeId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `transactions`
 --
 ALTER TABLE `transactions`
   MODIFY `TransId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT cho bảng `users`
---
-ALTER TABLE `users`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

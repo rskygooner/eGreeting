@@ -152,7 +152,7 @@ namespace eGreeting.Controllers
             var search = _userServices.CheckLogin(model);
             if (search != null)
             {
-                if (search.IsDeactive)
+                if (search.IsActive == Status.Active)
                 {
                     Alert("Your account has been block. Please contact Administrator.", NotificationType.warning);
                     return View();
@@ -179,7 +179,7 @@ namespace eGreeting.Controllers
                 if ((item.DateCreated).Value.AddMonths(1) < DateTime.Now || item.DateExpire < DateTime.Now)
                 {
                     Alert("Your Payment Info was expired. Please register again. Thank you.", NotificationType.warning);
-                    item.IsActive = false;
+                    item.IsActive = Status.Active;
                     _paymentServices.EditPayment(item);
                 }
             }
@@ -189,11 +189,9 @@ namespace eGreeting.Controllers
         public IActionResult Logout()
         {
             var username = HttpContext.Session.GetString("username");
-
             if (username != null)
             {
-                HttpContext.Session.SetString("username", null);
-                HttpContext.Session.SetString("role", null);
+                HttpContext.Session.Clear();
                 Alert("You has signed out!", NotificationType.success);
                 return RedirectToAction("Index");
             }

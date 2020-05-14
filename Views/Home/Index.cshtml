@@ -23,43 +23,177 @@
 </style>
 
 <div class="container">
-    <div class="col-sm-12">
-        <!-- light-slider -->
-        <div class="light-slider-menu">
-            <ul id="responsive-banner" style="padding: 0">
-                <li>
-                    <div>
-                        <img src="~/Content/img/banner-1.jpg" style="width: 100%; height: 50%" alt="">
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <img src="~/Content/img/banner-2.jpg" style="width: 100%; height: 50%">
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <img src="~/Content/img/banner.jpg" style="width: 100%; height: 50%">
-                    </div>
-                </li>
-            </ul>
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- light-slider -->
+            <div class="light-slider-menu">
+                <ul id="responsive-banner" style="padding: 0">
+                    <li>
+                        <div>
+                            <img src="~/content/img/e-banner1.gif" style="width: 100%;" alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="~/content/img/e-banner2.png" style="width: 100%;">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <img src="~/content/img/e-banner3.png" style="width: 100%;">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="container" style="letter-spacing:1px;">
+                <div class="my-auto text-center">
+                    <h1 class="text-center pt-5 pb-3">e-Greetings Online</h1>
+                    <h2 class="text-center pb-5">So fast, so awesome!</h2>
+                    <p class="subtitle">Whether it’s for a special occasion or just to send your regards, show someone how much you care with a fully customizable online eCard that’s easy to create but hard to forget.</p>
+                    <a href="#" class="text-center">
+                        <div class="btn sm-btn mt-xl-4 action-button" style="background-color:#ec5469">Get Started</div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+<!-- Section key features -->
+<section id="key-features-section">
+    <div class="container py-5 px-0">
+        <div class="row justify-content-center my-xl-5">
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/11.png"></a>
+                </div>
+                <p class="key-feature-title my-2">Designer Quality in No Time</p>
+                <p class="key-feature-subtitle">Exceed your expectations with our exclusive designs</p>
+            </div>
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/easy-to-use.png"></a>
+                </div>
+                <p class="key-feature-title my-2">Easy to Use</p>
+                <p class="key-feature-subtitle">Anyone can make an impressive creation in minutes</p>
+            </div>
+            <div class="w-100 d-md-block d-xl-none"></div>
+            <div class="col-sm-6 col-md-4 key-feature-wrapper action-button">
+                <div>
+                    <a><img src="~/content/img/share-your-creation.png"></a>
+                </div>
+                <p class="key-feature-title my-2">Share Your Creation</p>
+                <p class="key-feature-subtitle">Share your creation via email or social media</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 
-    <!-- Section Our Team -->
-    <section class="team-section text-center my-5">
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">Birthday</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive">
+                    @if (ViewBag.birthday != null)
+                    {
+                        foreach (var item in ViewBag.birthday)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">New Year</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive-1">
+                    @if (ViewBag.festival != null)
+                    {
+                        foreach (var item in ViewBag.festival)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12" style="padding-top: 30px; padding-bottom: 30px">
+    <h5 style="font-weight: bold; margin-bottom: 30px">Festival</h5>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="light-menu">
+                <ul id="responsive-2">
+                    @if (ViewBag.newyear != null)
+                    {
+                        foreach (var item in ViewBag.newyear)
+                        {
+                            <li>
+                                <div class="box-card" style="margin-bottom: 10px">
+                                    <img src="~/ImageCard/@item.ImageName" alt="@item.ImageName" class="image" style="width:100%">
+                                    <div class="middle">
+                                        <a href="/User/CreateTrans/@item.CardId" class="btn-select">SELECT</a>
+                                    </div>
+                                    <div class="name-card">
+                                        <h6>@item.NameCard</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Section Our Team -->
+<section class="team-section text-center my-5">
+    <div class="container">
 
         <!-- Section heading -->
-        <h2 class="h1-responsive font-weight-bold text-center my-5" style="color: #32f325 !important;">About us</h2>
+        <h2 class="h1-responsive font-weight-bold text-center my-5" style="color: #149c9c !important;">About us</h2>
         <div style="text-align:center">
             <p class="grey-text w-responsive mx-auto mb-5" style="text-align:justify; color: #000 !important">
-                <h5>Greeting cards are usually given on special occasions such as Birthday or other holidays, such as New Year and Festival. There is many kind of greeting card, but today, information technology is growing, we do not need to go to the greeting card shop but still can send greeting cards with just a mouse click.<br> With e-greeting cards, we make your celebrates easier, saving your cost, time, effort is our top priority!</h5>
+                <h5 class="subtitle">Greeting cards are usually given on special occasions such as Birthday or other holidays, such as New Year and Festival. There is many kind of greeting card, but today, information technology is growing, we do not need to go to the greeting card shop but still can send greeting cards with just a mouse click.<br> With e-greeting cards, we make your celebrates easier, saving your cost, time, effort is our top priority!</h5>
             </p>
         </div>
         <!-- Section description -->
         <!-- Grid row -->
-        <div class="row">
+        <div class="row py-5">
 
             <!-- Grid column Phuc-->
             <div class="col-lg-3 col-md-6 mb-lg-0 mb-5">
@@ -114,51 +248,50 @@
         </div>
         <!-- Grid row -->
 
-    </section>
-    <!--/.Section Our Team -->
-    <!-- Section: Contact v.1 -->
-    <section class="team-section text-center my-5">
+    </div>
+</section>
+<!--/.Section Our Team -->
+<!-- Section: Contact v.1 -->
+<section class="team-section text-center my-5">
 
-        <!-- Section heading -->
-        <h2 class="h1-responsive font-weight-bold my-5" style="color: #4a46e5 !important">Contact Us</h2>
+    <!-- Section heading -->
+    <h2 class="h1-responsive font-weight-bold my-5" style="color: #149c9c !important">Contact Us</h2>
 
-        <!-- Grid column -->
-        <!-- Grid column -->
-        <div class="container">
+    <!-- Grid column -->
+    <!-- Grid column -->
+    <div class="container">
 
-            <!--Google map-->
-            <div id="map-container-section" class="z-depth-1-half map-container-section mb-4" style="height: 400px">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3257176556144!2d106.6641388146226!3d10.78634619231479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed23ca5d8db%3A0x24d414f45e5a523!2zNTkwIEPDoWNoIE3huqFuZyBUaMOhbmcgOCwgUGjGsOG7nW5nIDExLCBRdeG6rW4gMywgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1564456157755!5m2!1svi!2s" frameborder="0" style="border:0; width:100%; height:400px" allowfullscreen></iframe>
-            </div>
-            <!-- Buttons-->
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fas fa-map-marker-alt" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>Ho Chi Minh city, 70000</p>
-                    <p class="mb-md-0">Vietnam</p>
-                </div>
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fas fa-phone" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>+ 84 234 567 89</p>
-                    <p class="mb-md-0">Mon - Fri, 8:00-22:00</p>
-                </div>
-                <div class="col-md-4">
-                    <a class="btn-floating accent-1">
-                        <i class="fa fa-envelope" style="font-size: 50px; color: #4285f4"></i>
-                    </a>
-                    <p>info@eGreeting.com</p>
-                    <p class="mb-0">sale@eGreeting.com</p>
-                </div>
-            </div>
-
+        <!--Google map-->
+        <div id="map-container-section" class="z-depth-1-half map-container-section mb-4" style="height: 400px">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3257176556144!2d106.6641388146226!3d10.78634619231479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed23ca5d8db%3A0x24d414f45e5a523!2zNTkwIEPDoWNoIE3huqFuZyBUaMOhbmcgOCwgUGjGsOG7nW5nIDExLCBRdeG6rW4gMywgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1564456157755!5m2!1svi!2s" frameborder="0" style="border:0; width:100%; height:400px" allowfullscreen></iframe>
         </div>
-        <!-- Grid column -->
+        <!-- Buttons-->
+        <div class="row text-center">
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fas fa-map-marker-alt" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>Ho Chi Minh city, 70000</p>
+                <p class="mb-md-0">Vietnam</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fas fa-phone" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>+ 84 234 567 89</p>
+                <p class="mb-md-0">Mon - Fri, 8:00-22:00</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn-floating accent-1">
+                    <i class="fa fa-envelope" style="font-size: 50px; color: #4285f4"></i>
+                </a>
+                <p>info@eGreeting.com</p>
+                <p class="mb-0">sale@eGreeting.com</p>
+            </div>
+        </div>
 
-    </section>
-    <!-- Section: Contact v.1 -->
+    </div>
+    <!-- Grid column -->
 
-</div>
+</section>
+<!-- Section: Contact v.1 -->
