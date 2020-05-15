@@ -65,7 +65,7 @@ namespace eGreeting.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var search = _userServices.CheckExistUser(user.UserName , user.Email);
+                    var search = _userServices.CheckExistUser(user.UserName, user.Email);
                     if (search == null)
                     {
                         if (_userServices.CreateUser(user))
@@ -262,44 +262,18 @@ namespace eGreeting.Controllers
             if (IsLoggedIn())
             {
                 var username = HttpContext.Session.GetString("username");
-                var searchUser = _userServices.GetUser(username);
-                var searchPayment = _paymentServices.GetPaymentByUsername(username);
-                if (searchPayment != null)
+                var searchCard = _cardServices.GetCard(id);
+                if (searchCard != null)
                 {
-                    if (searchUser == null)
+                    var model = new Transaction
                     {
-                        Alert("You not Register Email List", NotificationType.error);
-                        return RedirectToAction("SubscribeSend");
-                    }
-                    if (searchPayment.IsActive == Status.Inactive)
-                    {
-                        Alert("Your Info Payment is not activated. Please contact Administrator by send feedback.", NotificationType.error);
-                        return RedirectToAction("FeedbackIndex");
-                    }
-                    else
-                    {
-                        var searchCard = _cardServices.GetCard(id);
-                        //var searchEmailList = _emailListServices.GetEmailListByUsername(searchUser.UserName);
-                        //if (searchEmailList == null)
-                        //{
-                        //    Alert("You not register email list to send Card. Please click Subscribe Send Card to register email list.", NotificationType.error);
-                        //    return RedirectToAction("Index");
-                        //}
-                        if (searchCard != null)
-                        {
-                            var model = new Transaction
-                            {
-                                CardId = searchCard.CardId,
-                                Username = HttpContext.Session.GetString("username"),
-                                TransImage = searchCard.ImageName,
-                            };
-                            return View(model);
-                        }
-                        return RedirectToAction("Index");
-                    }
+                        CardId = searchCard.CardId,
+                        Username = username,
+                        TransImage = searchCard.ImageName,
+                    };
+                    return View(model);
                 }
-                Alert("Please purchase to use this feature. Thanks", NotificationType.info);
-                return RedirectToAction("DescriptionPayment");
+                return RedirectToAction("Index");
             }
             Alert("You need Log in to access this page", NotificationType.warning);
             return RedirectToAction("Login", "Home");
@@ -308,14 +282,14 @@ namespace eGreeting.Controllers
         //POST: User/CreateTrans
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateTrans(Transaction transaction)
+        public IActionResult CreateTransaction(Transaction transaction)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     transaction.TimeSend = DateTime.UtcNow;
-                    if (_transactionServices.CreateTransactions(transaction))
+                    if (_transactionServices.CreateTransaction(transaction))
                     {
                         Alert("Send eGreeting card successfully.", NotificationType.success);
                         return RedirectToAction("Index", "Home");

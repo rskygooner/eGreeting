@@ -12,7 +12,7 @@
         <img src="~/ImageCard/@Model.TransImage" alt="@Model.TransImage" style="width:50%" id="Image" />
     </div>
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm("CreateTransaction", "User", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "SendCard()" }))
 {
     @Html.AntiForgeryToken()
 
@@ -25,13 +25,13 @@
 
 
 
-        @*<div class="form-group">
+        <div class="form-group">
             @Html.LabelFor(model => model.Receiver, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Receiver, eGreeting.Services.EmailListServices.GetEmail(Model.Username), new { @class = "form-control" })
+                @Html.EditorFor(model => model.Receiver, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Receiver, "", new { @class = "text-danger" })
             </div>
-        </div>*@
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -53,15 +53,15 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-warning" })
-                <input type="submit" value="Send" class="btn btn-default" style="float:right !important" />
+                <input type="submit" value="Send" class="btn btn-default" style="float:right !important"/>
             </div>
         </div>
     </div>
 }
 
-<script>
+<script type="text/javascript">
     function SendCard() {
-        if ($("#Username").val() === "" || $("#NameCard").val() === "" || $("#ImageNameTrans").val() === "" || $("#Receiver").val() === "" || $("#Subject").val() === "" || $("#Content").val() === "")
+        if ($("#Username").val() === "" || $("#CardId").val() === "" || $("#TransImage").val() === "" || $("#Receiver").val() === "" || $("#Subject").val() === "" || $("#Content").val() === "")
         {
             Swal.fire('Error', 'Please fill out fields', 'warning');
             return false;
@@ -78,14 +78,14 @@
             if (result.value) {
                 var obj = {};
                 obj.Username = $("#Username").val();
-                obj.NameCard = $("#NameCard").val();
-                obj.ImageNameTrans = $("#ImageNameTrans").val();
+                obj.CardId = $("#CardId").val();
+                obj.TransImage = $("#TransImage").val();
                 obj.Receiver = $("#Receiver").val();
                 obj.Subject = $("#Subject").val();
                 obj.Content = $("#Content").val();
 
                 $.ajax({
-                    url: '@Url.Action("CreateTrans","User")',
+                    url: '@Url.Action("CreateTransaction","User")',
                     type: "POST",
                     data: obj,
                     success: function (res) {

@@ -10,7 +10,7 @@ namespace eGreeting.Services
     {
         List<Transaction> GetTransactions();
         Transaction GetTransaction(int id);
-        bool CreateTransactions(Transaction transaction);
+        bool CreateTransaction(Transaction transaction);
         bool DeleteTransaction(int id);
     }
     public class TransactionServices : ITransactionServices
@@ -33,7 +33,7 @@ namespace eGreeting.Services
             return transaction;
         }
 
-        public bool CreateTransactions(Transaction transaction)
+        public bool CreateTransaction(Transaction transaction)
         {
             var b = GetTransaction(transaction.TransId);
             if (b == null)
