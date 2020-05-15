@@ -72,12 +72,10 @@ namespace eGreeting.Services
             if (b != null)
             {
                 b.Password = editUser.Password;
-                b.Role = editUser.Role;
                 b.FullName = editUser.FullName;
                 b.Gender = editUser.Gender;
                 b.Phone = editUser.Phone;
                 b.Email = editUser.Email;
-                b.IsActive = editUser.IsActive;
                 _dbContext.SaveChanges();
                 return true;
             }
