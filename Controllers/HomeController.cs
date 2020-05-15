@@ -152,14 +152,14 @@ namespace eGreeting.Controllers
             var search = _userServices.CheckLogin(model);
             if (search != null)
             {
-                if (search.IsActive == Status.Active)
+                if (search.IsActive == Status.Inactive)
                 {
                     Alert("Your account has been block. Please contact Administrator.", NotificationType.warning);
                     return View();
                 }
                 HttpContext.Session.SetString("username", search.UserName);
                 HttpContext.Session.SetString("fullname", search.FullName);
-                HttpContext.Session.SetString("role", search.Role.ToString().ToLower());
+                HttpContext.Session.SetString("role", search.Role.ToString());
                 CheckActive(search);
                 return RedirectToAction("Index");
             }

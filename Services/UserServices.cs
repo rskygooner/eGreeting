@@ -15,7 +15,7 @@ namespace eGreeting.Services
         bool CreateUser(UserViewModel user);
         bool EditUser(User editUser);
         bool DeleteUser(string username);
-        bool ChangePassword(User user);
+        bool ChangePassword(ChangePasswordModel user);
     }
     public class UserServices : IUserServices
     {
@@ -117,12 +117,12 @@ namespace eGreeting.Services
             return false;
         }
 
-        public bool ChangePassword(User user)
+        public bool ChangePassword(ChangePasswordModel user)
         {
-            var c = GetUser(user.UserName);
-            if (c != null)
+            var userEdit = GetUser(user.UserName);
+            if (userEdit != null)
             {
-                c.Password = user.Password;
+                userEdit.Password = user.Password;
                 _dbContext.SaveChanges();
                 return true;
             }

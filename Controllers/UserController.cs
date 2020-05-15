@@ -159,7 +159,6 @@ namespace eGreeting.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 if (_paymentServices.EditPayment(payment))
                 {
                     Alert("Edited successfully!!", NotificationType.success);
@@ -184,17 +183,22 @@ namespace eGreeting.Controllers
         }
         // End Phuc
 
-        public IActionResult ChangePassword(int id)
+        public IActionResult ChangePassword()
         {
             if (IsLoggedIn())
             {
-                if (id > 0)
+                var user = _userServices.GetUser(HttpContext.Session.GetString("username"));
+                if (user.Role == Role.User)
                 {
-                    return View();
+                    var model = new ChangePasswordModel
+                    {
+                        UserName = user.UserName,
+                    };
+                    return View(model);
                 }
                 else
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ManageUser", "Admin");
                 }
             }
             Alert("You need Log in to access this page", NotificationType.warning);
@@ -202,17 +206,28 @@ namespace eGreeting.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(User user)
+        public IActionResult ChangePassword(ChangePasswordModel user)
         {
             if (ModelState.IsValid)
             {
-                var existUser = _userServices.GetUser(HttpContext.Session.GetString("username"));
-                if (existUser != null)
+                var existUser = _userServices.GetUser(user.UserName);
+                if(existUser != null)
                 {
-                    _userServices.ChangePassword(user);
-
-                    Alert("Change Password successfully!!", NotificationType.success);
-                    return RedirectToAction("Index");
+                    if (existUser.Password != user.Password)
+                    {
+                        Alert("Password not match", NotificationType.error);
+                        return View();
+                    }
+                    if (user.Password == user.NewPassword)
+                    {
+                        Alert("New password can not match with password", NotificationType.error);
+                        return View();
+                    }
+                    if (_userServices.ChangePassword(user))
+                    {
+                        Alert("Change Password successfully!!", NotificationType.success);
+                        return RedirectToAction("Index");
+                    }
                 }
                 Alert("Not found this user.", NotificationType.error);
                 return View();
