@@ -32,7 +32,7 @@ namespace eGreeting.Models
         [Display(Name = "Expired")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime DateExpire { get; set; }
+        public DateTime? DateExpire { get; set; }
 
         [Display(Name = "Date Created")]
         [DataType(DataType.Date)]

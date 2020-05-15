@@ -152,7 +152,7 @@ namespace eGreeting.Controllers
             var search = _userServices.CheckLogin(model);
             if (search != null)
             {
-                if (search.IsActive == Status.Active)
+                if (search.IsActive != Status.Active)
                 {
                     Alert("Your account has been block. Please contact Administrator.", NotificationType.warning);
                     return View();
@@ -176,9 +176,9 @@ namespace eGreeting.Controllers
             PaymentInfo item = _paymentServices.GetPaymentByUsername(user.UserName);
             if (item != null && item.DateCreated != null)
             {
-                if ((item.DateCreated).Value.AddMonths(1) < DateTime.Now || item.DateExpire < DateTime.Now)
+                if (item.DateExpire < DateTime.Now)
                 {
-                    Alert("Your Payment Info was expired. Please register again. Thank you.", NotificationType.warning);
+                    Alert("Your Payment Info was expired. Please Subscribe again. Thank you.", NotificationType.warning);
                     item.IsActive = Status.Active;
                     _paymentServices.EditPayment(item);
                 }

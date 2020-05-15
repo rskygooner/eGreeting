@@ -1,0 +1,59 @@
+@page
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div class="sidebar" data-color="green" data-background-color="white" data-image='@Url.Content("~/content/img/sidebar-2.jpg")'>
+    <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+    <div class="logo">
+        <a href='@Url.Action("Index","Home")'>
+            <img class="mx-auto text-center d-block" src='@Url.Content("~/content/img/e-logo1.png")' style="width:10rem" />
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("Index","Admin")'>
+                    <i class="fas fa-columns"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("ManageCard","Admin")'>
+                    <i class="fas fa-envelope-open-text"></i>
+                    <p>Manage Card</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("ManageUser","Admin")'>
+                    <i class="fas fa-address-card"></i>
+                    <p>Manage User</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("ManageTransaction","Admin")'>
+                    <i class="fas fa-mail-bulk"></i>
+                    <p>Manage Transaction</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("ManagePaymentInfo","Admin")'>
+                    <i class="fas fa-money-check-alt"></i>
+                    <p>Manage Payment</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='@Url.Action("ManageFeedback","Admin")'>
+                    <i class="fas fa-comments"></i>
+                    <p>Manage Feedback</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

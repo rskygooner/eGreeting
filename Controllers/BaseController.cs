@@ -16,7 +16,7 @@ namespace eGreeting.Controllers
             var role = HttpContext.Session.GetString("role");
             if (username != null && role != null)
             {
-                if (role == Role.Admin.ToString())
+                if (role.Equals(Role.Admin.ToString()))
                 {
                     return true;
                 }

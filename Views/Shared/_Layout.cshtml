@@ -43,7 +43,12 @@
     <!-- Layout -->
     <!-- Back to top button -->
     <a id="button"></a>
-
+    <script>
+        $(document).ready(function () {
+            $('ul.nav.navbar-nav').find('a[href="' + location.pathname + '"]')
+                .closest('li').addClass('active');
+        });
+    </script>
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg bg-light sticky-top" style="background-image: linear-gradient(to right, #c5e3de, #b8e3dc , #a6ded5); justify-content:space-between;">
 

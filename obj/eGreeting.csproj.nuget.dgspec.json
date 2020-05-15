@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/inmac/Projects/eGreeting/eGreeting/eGreeting.csproj": {}
+    "/Users/inmac/Projects/eGreeting_local/eGreeting/eGreeting.csproj": {}
   },
   "projects": {
-    "/Users/inmac/Projects/eGreeting/eGreeting/eGreeting.csproj": {
+    "/Users/inmac/Projects/eGreeting_local/eGreeting/eGreeting.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/inmac/Projects/eGreeting/eGreeting/eGreeting.csproj",
+        "projectUniqueName": "/Users/inmac/Projects/eGreeting_local/eGreeting/eGreeting.csproj",
         "projectName": "eGreeting",
-        "projectPath": "/Users/inmac/Projects/eGreeting/eGreeting/eGreeting.csproj",
+        "projectPath": "/Users/inmac/Projects/eGreeting_local/eGreeting/eGreeting.csproj",
         "packagesPath": "/Users/inmac/.nuget/packages/",
-        "outputPath": "/Users/inmac/Projects/eGreeting/eGreeting/obj/",
+        "outputPath": "/Users/inmac/Projects/eGreeting_local/eGreeting/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
@@ -56,6 +56,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[3.1.3, )"
+            },
+            "Microsoft.Extensions.Logging.Debug": {
+              "target": "Package",
+              "version": "[3.1.1, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
