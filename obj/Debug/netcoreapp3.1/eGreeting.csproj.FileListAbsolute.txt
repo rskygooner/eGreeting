@@ -429,10 +429,8 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_NotificationPanel.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\ChangePassword.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\ChangeSubscribeSend.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\CreateTransaction.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\DescriptionPayment.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Edit.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\EditPaymentInfo.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Index.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Payment.cshtml.g.cs
@@ -448,5 +446,9 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\staticwebassets\eGreeting.Sta
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.dll
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.pdb
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.genruntimeconfig.cache
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.csprojAssemblyReference.cache
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Feedback.cshtml.g.cs
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ManageCategory.cshtml.g.cs
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\EditUser.cshtml.g.cs
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\SubscribeList.cshtml.g.cs
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.csprojAssemblyReference.cache
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateCategory.cshtml.g.cs

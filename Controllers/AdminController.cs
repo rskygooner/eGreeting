@@ -23,14 +23,9 @@ namespace eGreeting.Controllers
         private readonly IFeedbackServices _feedbackServices;
         private readonly ISubscribleServices _emailListServices;
         private readonly ITransactionServices _transactionServices;
-        public AdminController(IWebHostEnvironment environment,
-            ICardServices cardServices,
-            ICategoryServices categoryServices,
-            IUserServices userServices,
-            IPaymentServices paymentServices,
-            IFeedbackServices feedbackServices,
-            ISubscribleServices emailListServices,
-            ITransactionServices transactionServices)
+        public AdminController(IWebHostEnvironment environment, ICardServices cardServices, ICategoryServices categoryServices,
+            IUserServices userServices, IPaymentServices paymentServices, IFeedbackServices feedbackServices,
+            ISubscribleServices emailListServices, ITransactionServices transactionServices)
         {
             _hostingEnvironment = environment;
             _categoryServices = categoryServices;
@@ -56,6 +51,7 @@ namespace eGreeting.Controllers
             return RedirectToAction("Login");
         }
 
+        #region Login
         //GET: Admin/Login
         public IActionResult Login()
         {
@@ -92,7 +88,85 @@ namespace eGreeting.Controllers
             }
             return View();
         }
+        #endregion
 
+        #region Category
+        //Manage Category//
+        // GET: Admin/ManageCard
+        public IActionResult ManageCategory()
+        {
+            if (IsAdmin())
+            {
+                var categories = _categoryServices.GetCategories();
+                return View(categories);
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Login", "Home");
+        }
+
+        public IActionResult CreateCategory()
+        {
+            if (IsAdmin())
+            {
+                return View();
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCategory(Category category)
+        {
+            if (IsAdmin())
+            {
+                if (ModelState.IsValid)
+                {
+                    var search = _categoryServices.GetCategory(category.CategoryId);
+                    if (search == null)
+                    {
+                        if (_categoryServices.CreateCategory(category))
+                        {
+                            Alert("Create category successfully!", NotificationType.success);
+                            return RedirectToAction("ManageUser");
+                        }
+                    }
+                    else
+                    {
+                        Alert("Category already exist!!", NotificationType.error);
+                        return View();
+                    }
+                }
+                return View();
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult EditCategory()
+        {
+            if (IsAdmin())
+            {
+                return View();
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+
+        public IActionResult EditCategory(int id)
+        {
+            var search = _categoryServices.GetCategory(id);
+            if (search != null)
+            {
+                return View(search);
+            }
+            Alert("Not found user", NotificationType.error);
+            return RedirectToAction("Index");
+        }
+
+
+        #region Feedback
         //Manage Feedback//
         // GET: Admin/ManageFeedback
         public IActionResult ManageFeedback(int? page)
@@ -140,7 +214,9 @@ namespace eGreeting.Controllers
                 return RedirectToAction("ManageFeedback");
             }
         }
+        #endregion
 
+        #region Card
         //Manage Card//
         // GET: Admin/ManageCard
         public IActionResult ManageCard(string pName, int? page)
@@ -153,7 +229,7 @@ namespace eGreeting.Controllers
                 if (!string.IsNullOrEmpty(pName))
                 {
                     var model = cards.Where(x => x.CardName.Contains(pName.ToLower()) || x.CardName.Contains(pName.ToUpper()))
-                        .OrderBy(x=>x.CardName)
+                        .OrderBy(x => x.CardName)
                         .ToPagedList(pageNum, maxSize);
                     ViewBag.page = model;
                     return View();
@@ -185,7 +261,7 @@ namespace eGreeting.Controllers
         // POST: Admin/CreateCard
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateCard(Card newCard,IFormFile file)
+        public IActionResult CreateCard(Card newCard, IFormFile file)
         {
             try
             {
@@ -205,7 +281,7 @@ namespace eGreeting.Controllers
                             if (CheckExtImg(ext))
                             {
                                 var fileName = Path.GetFileName(file.FileName);
-                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath,"ImageCard");
+                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "ImageCard");
                                 newCard.ImageName = fileName;
                                 newCard.DateCreated = DateTime.Now;
                                 if (_cardServices.GetImageCard(fileName))
@@ -347,7 +423,7 @@ namespace eGreeting.Controllers
                 return View();
             }
         }
-
+         
         private readonly List<string> ImageExtension = new List<string> { ".png", ".jpg", ".jpeg" };
 
         bool CheckExtImg(string ext)
@@ -381,8 +457,9 @@ namespace eGreeting.Controllers
                 return RedirectToAction("ManageCard");
             }
         }
+        #endregion
 
-
+        #region User
         //Manage User//
         // GET: Admin/ManageUser
         public IActionResult ManageUser(int? page)
@@ -391,7 +468,7 @@ namespace eGreeting.Controllers
             {
                 int maxSize = 5;
                 var pageNum = page ?? 1;
-                var users = _userServices.GetUsers().OrderBy(x=>x.Role).ToPagedList(pageNum, maxSize);
+                var users = _userServices.GetUsers().OrderBy(x => x.Role).ToPagedList(pageNum, maxSize);
                 ViewBag.page = users;
                 return View();
             }
@@ -505,16 +582,16 @@ namespace eGreeting.Controllers
             {
                 if (IsAdmin())
                 {
-                        if (_userServices.DeleteUser(username))
-                        {
-                            Alert("Delete User Successfully .", NotificationType.success);
-                            return RedirectToAction("ManageUser");
-                        }
-                        else
-                        {
-                            Alert("Delete error, cannot find this User!!!", NotificationType.error);
-                            return RedirectToAction("ManageUser");
-                        }                    
+                    if (_userServices.DeleteUser(username))
+                    {
+                        Alert("Delete User Successfully .", NotificationType.success);
+                        return RedirectToAction("ManageUser");
+                    }
+                    else
+                    {
+                        Alert("Delete error, cannot find this User!!!", NotificationType.error);
+                        return RedirectToAction("ManageUser");
+                    }
                 }
                 Alert("You not permit to access that page", NotificationType.warning);
                 return RedirectToAction("Index", "Home");
@@ -525,7 +602,9 @@ namespace eGreeting.Controllers
                 return RedirectToAction("ManageCard");
             }
         }
+        #endregion
 
+        #region Payment
         //Manage Payment//
         // GET: /Admin/ManagePaymentInfo
         public IActionResult ManagePaymentInfo(int? page)
@@ -534,7 +613,7 @@ namespace eGreeting.Controllers
             {
                 int maxSize = 5;
                 var pageNum = page ?? 1;
-                var payments = _paymentServices.GetPayments().OrderByDescending(x=>x.DateCreated).ToPagedList(pageNum, maxSize);
+                var payments = _paymentServices.GetPayments().OrderByDescending(x => x.DateCreated).ToPagedList(pageNum, maxSize);
                 ViewBag.page = payments;
                 return View();
             }
@@ -553,8 +632,8 @@ namespace eGreeting.Controllers
                     var searchUser = _userServices.GetUser(searchPayment.UserName);
                     if (searchUser != null)
                     {
-                           Alert("Change status activation successfully", NotificationType.success);
-                            return RedirectToAction("ManagePaymentInfo");
+                        Alert("Change status activation successfully", NotificationType.success);
+                        return RedirectToAction("ManagePaymentInfo");
                     }
                     Alert("Cannot found User.", NotificationType.error);
                     return View();
@@ -590,17 +669,18 @@ namespace eGreeting.Controllers
                 throw;
             }
         }
+        #endregion
 
+        #region Transaction
         //Manage Transaction//
-        // GET: /Admin/ManageTrans
-
+        // GET: /Admin/ManageTransaction
         public IActionResult ManageTransaction(int? page)
         {
             if (IsAdmin())
             {
                 int maxSize = 9;
                 var pageNum = page ?? 1;
-                var transactions = _transactionServices.GetTransactions().OrderByDescending(x=>x.TimeSend).ToPagedList(pageNum, maxSize);
+                var transactions = _transactionServices.GetTransactions().OrderByDescending(x => x.TimeSend).ToPagedList(pageNum, maxSize);
                 ViewBag.page = transactions;
                 return View();
             }
@@ -635,6 +715,7 @@ namespace eGreeting.Controllers
                 throw;
             }
         }
+        #endregion
 
         public void Alert(string message, NotificationType notificationType)
         {

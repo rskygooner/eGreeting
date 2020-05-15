@@ -13,7 +13,7 @@ namespace eGreeting.Services
         User CheckExistUser(string username, string email);
         User CheckLogin(User user);
         bool CreateUser(UserViewModel user);
-        bool EditUser(User editUser);
+        bool EditUser(User user);
         bool DeleteUser(string username);
         bool ChangePassword(ChangePasswordModel user);
     }
@@ -52,30 +52,48 @@ namespace eGreeting.Services
 
         public bool CreateUser(UserViewModel userView)
         {
-            var user = new User
+            try
             {
-                UserName = userView.UserName,
-                Password = userView.Password,
-                FullName = userView.FullName,
-                Gender = userView.Gender,
-                Phone = userView.Phone,
-                Email = userView.Email
-            };
-            _dbContext.Add(user);
-            _dbContext.SaveChanges();
-            return true;
+                var user = new User
+                {
+                    UserName = userView.UserName,
+                    Password = userView.Password,
+                    FullName = userView.FullName,
+                    Gender = userView.Gender,
+                    Phone = userView.Phone,
+                    Email = userView.Email
+                };
+                _dbContext.Add(user);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
-        public bool EditUser(User editUser)
+        public bool EditUser(User user)
         {
-            var b = GetUser(editUser.UserName);
-            if (b != null)
+            try
             {
-                b.Password = editUser.Password;
-                b.FullName = editUser.FullName;
-                b.Gender = editUser.Gender;
-                b.Phone = editUser.Phone;
-                b.Email = editUser.Email;
+                _dbContext.Users.Update(user);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteUser(string username)
+        {
+            var user = GetUser(username);
+            if (user != null)
+            {
+                _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
                 return true;
             }
@@ -102,29 +120,24 @@ namespace eGreeting.Services
             return false;
         }
 
-
-        public bool DeleteUser(string username)
-        {
-            var user = GetUser(username);
-            if (user != null)
-            {
-                _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool ChangePassword(ChangePasswordModel user)
         {
-            var userEdit = GetUser(user.UserName);
-            if (userEdit != null)
+            try
             {
-                userEdit.Password = user.Password;
-                _dbContext.SaveChanges();
-                return true;
+                var userEdit = GetUser(user.UserName);
+                if (userEdit != null)
+                {
+                    userEdit.Password = user.Password;
+                    _dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
     }
 }
