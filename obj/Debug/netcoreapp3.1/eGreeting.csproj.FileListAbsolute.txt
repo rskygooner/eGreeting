@@ -450,5 +450,5 @@ D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\Feedback.csh
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ManageCategory.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\EditUser.cshtml.g.cs
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\User\SubscribeList.cshtml.g.cs
+D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\eGreeting.csprojAssemblyReference.cache
 D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\CreateCategory.cshtml.g.cs
-D:\.Net\.NetCore\eGreeting\obj\Debug\netcoreapp3.1\Razor\Views\Admin\EditCategory.cshtml.g.cs

@@ -1,26 +1,52 @@
 ﻿@model IEnumerable<eGreeting.Models.Category>
 <h2>Manage Category</h2>
+<<<<<<< HEAD
 @{
     ViewBag.Title = "Manage Card";
     int i = 1;
 }
+=======
+
+>>>>>>> aa3b5888926c32b9d3f36a6df5c5409f5c7c719a
 <p>
     @Html.ActionLink("Create New Category", "CreateCategory", "Admin", new { @class = "btn btn-success" })
 </p>
 
 <table class="table">
     <tr>
+<<<<<<< HEAD
         <th>No.</th>
         <th>CategoryId</th>
         <th>CategoryName</th>
         <th>IsActive</th>
         <th>Action</th>
+=======
+
+        <th>
+
+            CategoryId
+        </th>
+        <th>
+
+            CategoryName
+        </th>
+        <th>
+
+            IsActive
+        </th>
+        <th>
+            Action
+        </th>
+>>>>>>> aa3b5888926c32b9d3f36a6df5c5409f5c7c719a
     </tr>
 
     @foreach (var item in Model)
     {
 <tr>
+<<<<<<< HEAD
     <td>@i</td>
+=======
+>>>>>>> aa3b5888926c32b9d3f36a6df5c5409f5c7c719a
     <td>
         @item.CategoryId
     </td>
@@ -31,13 +57,20 @@
         @item.IsActive
     </td>
     <td>
+<<<<<<< HEAD
         <a class="btn btn-warning" href="/Admin/EditCategory/@item.CategoryId"><i class="far fa-edit"></i></a>
+=======
+        <a class="btn btn-warning" href="/Admin/EditCard/@item.CategoryId"><i class="far fa-edit"></i></a>
+>>>>>>> aa3b5888926c32b9d3f36a6df5c5409f5c7c719a
         <a onClick="doDelete(@item.CategoryId)" class="btn btn-danger btn-circle">
             <i style="color: #fff" class="fas fa-trash"></i>
         </a>
     </td>
 </tr>
+<<<<<<< HEAD
     i++;
+=======
+>>>>>>> aa3b5888926c32b9d3f36a6df5c5409f5c7c719a
     }
 
 </table>

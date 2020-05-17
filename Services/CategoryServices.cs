@@ -1,5 +1,4 @@
 ﻿using eGreeting.Models;
-using Microsoft.CodeAnalysis.Differencing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,9 @@ namespace eGreeting.Services
 {
     public interface ICategoryServices
     {
-        List<Category> GetCategories();
+        IEnumerable<Category> GetCategories();
         Category GetCategory(int id);
         bool CreateCategory(Category category);
-        bool EditCategory(Category category);
-        bool DeleteCategory(int id);
     }
     public class CategoryServices : ICategoryServices
     {
@@ -24,9 +21,9 @@ namespace eGreeting.Services
             _dbContext = dbContext;
         }
 
-        public List<Category> GetCategories()
+        public IEnumerable<Category> GetCategories()
         {
-            List<Category> categories = _dbContext.Categories.ToList();
+            IEnumerable<Category> categories = _dbContext.Categories.ToList();
             return categories;
         }
         public Category GetCategory(int id)
@@ -51,23 +48,7 @@ namespace eGreeting.Services
         {
             try
             {
-                var cate = _dbContext.Categories.Find(category.CategoryId);
-                cate.CategoryName = category.CategoryName;
-                cate.IsActive = category.IsActive;
-                _dbContext.SaveChanges();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public bool DeleteCategory(int id)
-        {
-            try
-            {
-                var cate = _dbContext.Categories.Find(id);
-                _dbContext.Remove(cate);
+                _dbContext.Categories.Update(category);
                 _dbContext.SaveChanges();
                 return true;
             }
