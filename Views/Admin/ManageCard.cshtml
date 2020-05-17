@@ -2,7 +2,6 @@
 @using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "Manage Card";
-    Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
     var pageList = (IPagedList)ViewBag.page;
     int i = 1;
 }
@@ -19,31 +18,18 @@
 </form>
 <table class="table">
     <tr>
-
-        <th>
-
-            NameCard
-        </th>
-        <th>
-
-            Category
-        </th>
-        <th>
-
-            Image
-        </th>
-        <th>
-
-            DateCreated
-        </th>
-        <th>
-            Action
-        </th>
+        <th>No.</th>
+        <th>NameCard</th>
+        <th>Category</th>
+        <th>Image</th>
+        <th>DateCreated</th>
+        <th>Action</th>
     </tr>
 
     @foreach (var item in ViewBag.page)
     {
         <tr>
+            <td>@i</td>
             <td>
                 @item.CardName
             </td>

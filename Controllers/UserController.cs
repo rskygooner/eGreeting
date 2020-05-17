@@ -94,7 +94,7 @@ namespace eGreeting.Controllers
         }
 
         // GET: User/Edit/5
-        public IActionResult Edit(string username)
+        public IActionResult EditUser(string username)
         {
             if (IsLoggedIn())
             {
@@ -116,24 +116,25 @@ namespace eGreeting.Controllers
         // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(User user)
+        public IActionResult EditUser(User user)
         {
-            var search = _userServices.GetUser(user.UserName);
             if (ModelState.IsValid)
             {
-                _userServices.EditUser(user);
-                Alert("Edited successfully!!", NotificationType.success);
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (search != null)
+                var search = _userServices.GetUser(user.UserName);
+                if(search != null)
                 {
-                    return View(search);
+                    if (_userServices.EditUser(user))
+                    {
+                        Alert("Edited successfully!!", NotificationType.success);
+                        return RedirectToAction("Index");
+                    }
+                    Alert("Edit User failed!", NotificationType.error);
+                    return RedirectToAction("Index");
                 }
-                Alert("Cannot get User", NotificationType.error);
+                Alert("Can not get user!", NotificationType.error);
                 return RedirectToAction("Index");
             }
+            return View();
         }
 
         //Phuc
@@ -198,7 +199,8 @@ namespace eGreeting.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ManageUser", "Admin");
+                    Alert("Admin user please login to admin panel to change your info!!", NotificationType.error);
+                    return RedirectToAction("Index");
                 }
             }
             Alert("You need Log in to access this page", NotificationType.warning);
@@ -416,7 +418,7 @@ namespace eGreeting.Controllers
 
 
         //GET: User/EditSubscribe/5
-        public IActionResult EditSubscribe(string username)
+        public IActionResult SubscribeList(string username)
         {
             if (IsLoggedIn())
             {
@@ -435,7 +437,7 @@ namespace eGreeting.Controllers
         //POST: User/AddEmailList
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddSubscribleList(SubscribeList subscribe)
+        public IActionResult SubscribeList(SubscribeList subscribe)
         {
             if (subscribe.SubscribeEmail != null)
             {

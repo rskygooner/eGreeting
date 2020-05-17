@@ -31,10 +31,9 @@ namespace eGreeting.Services
 
         public List<Card> GetCards()
         {
-            List<Card> cards = _dbContext.Cards.OrderByDescending(x => x.DateCreated).ToList();
+            List<Card> cards = _dbContext.Cards.ToList();
             return cards;
         }
-
 
         public List<Card> SearchCards(string nameCard)
         {
@@ -87,7 +86,6 @@ namespace eGreeting.Services
             return false;
         }
 
-
         public bool EditCard(Card card)
         {
             var b = GetCard(card.CardId);
@@ -114,14 +112,17 @@ namespace eGreeting.Services
 
         public bool DeleteCard(int id)
         {
-            var b = GetCard(id);
-            if (b != null)
+            try
             {
-                _dbContext.Cards.Remove(b);
+                var crd = GetCard(id);
+                _dbContext.Cards.Remove(crd);
                 _dbContext.SaveChanges();
                 return true;
             }
-            return false;
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

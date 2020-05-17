@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using eGreeting.Models;
 using eGreeting.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -23,14 +22,9 @@ namespace eGreeting.Controllers
         private readonly IFeedbackServices _feedbackServices;
         private readonly ISubscribleServices _emailListServices;
         private readonly ITransactionServices _transactionServices;
-        public AdminController(IWebHostEnvironment environment,
-            ICardServices cardServices,
-            ICategoryServices categoryServices,
-            IUserServices userServices,
-            IPaymentServices paymentServices,
-            IFeedbackServices feedbackServices,
-            ISubscribleServices emailListServices,
-            ITransactionServices transactionServices)
+        public AdminController(IWebHostEnvironment environment, ICardServices cardServices, ICategoryServices categoryServices,
+            IUserServices userServices, IPaymentServices paymentServices, IFeedbackServices feedbackServices,
+            ISubscribleServices emailListServices, ITransactionServices transactionServices)
         {
             _hostingEnvironment = environment;
             _categoryServices = categoryServices;
@@ -56,6 +50,7 @@ namespace eGreeting.Controllers
             return RedirectToAction("Login");
         }
 
+        #region Login
         //GET: Admin/Login
         public IActionResult Login()
         {
@@ -88,11 +83,315 @@ namespace eGreeting.Controllers
             }
             else
             {
-                Alert("Invalid Account", NotificationType.error);
+                Alert("Invalid Account!", NotificationType.error);
             }
             return View();
         }
+        #endregion
 
+        #region Category
+        //Manage Category//
+        // GET: Admin/ManageCategory
+        public IActionResult ManageCategory()
+        {
+            if (IsAdmin())
+            {
+                var categories = _categoryServices.GetCategories();
+                return View(categories);
+            }
+            Alert("You not permit to access that page.", NotificationType.warning);
+            return RedirectToAction("Login", "Home");
+        }
+
+        public IActionResult CreateCategory()
+        {
+            if (IsAdmin())
+            {
+                return View();
+            }
+            Alert("You not permit to access that page.", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCategory(Category category)
+        {
+            if (IsAdmin())
+            {
+                if (ModelState.IsValid)
+                {
+                    if (_categoryServices.CreateCategory(category))
+                    {
+                        Alert("Create category successfully!", NotificationType.success);
+                        return RedirectToAction("ManageCategory");
+                    }
+                    Alert("Create category failed.", NotificationType.error);
+                    return View();
+                }
+                return View();
+            }
+            Alert("You not permit to access that page.", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult EditCategory(int id)
+        {
+            if (IsAdmin())
+            {
+                var search = _categoryServices.GetCategory(id);
+                if (search != null)
+                {
+                    return View(search);
+                }
+                Alert("Cannot get category.", NotificationType.error);
+                return RedirectToAction("Index");
+            }
+            Alert("You not permit to access that page!", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditCategory(Category category)
+        {
+            if (IsAdmin())
+            {
+                if (ModelState.IsValid)
+                {
+                    if (_categoryServices.EditCategory(category))
+                    {
+                        Alert("Edit category successfully!", NotificationType.success);
+                        return RedirectToAction("ManageCategory");
+                    }
+                    Alert("Edit category failed.", NotificationType.error);
+                    return View();
+                }
+                return View();
+            }
+            Alert("You not permit to access that page.", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCategory(int id)
+        {
+            if (IsAdmin())
+            {
+                if (_categoryServices.DeleteCategory(id))
+                {
+                    return RedirectToAction("ManageCategory");
+                }
+                Alert("Delete Card failed.", NotificationType.error);
+                return RedirectToAction("ManageCategory");
+            }
+            Alert("You not permit to access this action.", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+
+        #region Card
+        //Manage Card//
+        // GET: Admin/ManageCard
+        public IActionResult ManageCard(string pName, int? page)
+        {
+            if (IsAdmin())
+            {
+                var cards = _cardServices.GetCards();
+                int maxSize = 9;
+                var pageNum = page ?? 1;
+                if (!string.IsNullOrEmpty(pName))
+                {
+                    var model = cards.Where(x => x.CardName.ToLower().Contains(pName) || x.CardName.ToUpper().Contains(pName))
+                        .OrderBy(x => x.CardName)
+                        .ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
+                }
+                else
+                {
+                    var model = cards.OrderBy(x => x.CardName).ToPagedList(pageNum, maxSize);
+                    ViewBag.page = model;
+                    return View();
+                }
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Admin/CreateCard
+        public IActionResult CreateCard()
+        {
+            if (IsAdmin())
+            {
+                var categoryList = _categoryServices.GetCategories();
+                ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
+                return View();
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        // POST: Admin/CreateCard
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateCard(Card newCard, IFormFile file)
+        {
+            if (IsAdmin())
+            {
+                if (ModelState.IsValid)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        if (_cardServices.GetNameCard(newCard.CardName))
+                        {
+                            Alert("Namecard has been exist.", NotificationType.error);
+                            return View();
+                        }
+
+                        var ext = Path.GetExtension(file.FileName);
+                        if (CheckExtImg(ext))
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "ImageCard");
+                            newCard.ImageName = fileName;
+                            newCard.DateCreated = DateTime.Now;
+                            if (_cardServices.GetImageCard(fileName))
+                            {
+                                Alert("Image Name has been exist.", NotificationType.error);
+                                return View();
+                            }
+                            if (_cardServices.CreateCard(newCard))
+                            {
+                                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                                {
+                                    file.CopyTo(fileStream);
+                                }
+                                Alert("Create new Card successfully", NotificationType.success);
+                                return RedirectToAction("ManageCard");
+                            }
+                            Alert("Create new card failed.", NotificationType.error);
+                            return View();
+                        }
+                        else
+                        {
+                            Alert("File format invalid. Please select file *.png/.jpg/.jpeg.", NotificationType.error);
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        Alert("Please choose Image", NotificationType.error);
+                        return View();
+                    }
+                }
+                return View();
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+
+        //GET: Admin/EditCard/5
+        public IActionResult EditCard(int id)
+        {
+            if (IsAdmin())
+            {
+                var search = _cardServices.GetCard(id);
+                if (search != null)
+                {
+                    var categoryList = _categoryServices.GetCategories();
+                    ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
+                    return View(search);
+                }
+                Alert("Cannot get Card", NotificationType.error);
+                return RedirectToAction("Index");
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Login", "Home");
+        }
+
+        //POST: Admin/EditCard/5
+        [HttpPost]
+        public IActionResult EditCard(Card editCard, IFormFile file)
+        {
+            if (IsAdmin())
+            {
+                if (ModelState.IsValid)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        var ext = Path.GetExtension(file.FileName);
+                        if (CheckExtImg(ext))
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "ImageCard");
+                            editCard.ImageName = fileName;
+                            editCard.DateCreated = DateTime.Now;
+                            if (_cardServices.EditCard(editCard))
+                            {
+                                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                                {
+                                    file.CopyTo(fileStream);
+                                }
+                                Alert("Update Card successfully", NotificationType.success);
+                                return RedirectToAction("ManageCard");
+                            }
+                            Alert("Update card failed.", NotificationType.error);
+                            return View();
+                        }
+                        else
+                        {
+                            Alert("File format invalid. Please select file *.png/.jpg/.jpeg.", NotificationType.error);
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        if (editCard.DateCreated == null)
+                        {
+                            editCard.DateCreated = DateTime.Now;
+                        }
+                        if (_cardServices.EditCard(editCard))
+                        {
+                            Alert("Update Card successfully", NotificationType.success);
+                            return RedirectToAction("ManageCard");
+                        }
+                        Alert("Update card failed.", NotificationType.error);
+                        return View();
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Login", "Home");
+        }
+
+        private readonly List<string> ImageExtension = new List<string> { ".png", ".jpg", ".jpeg" };
+
+        bool CheckExtImg(string ext)
+        {
+            return ImageExtension.Contains(ext.ToLower());
+        }
+
+
+        // GET: Admin/Delete/5
+        public IActionResult DeleteCard(int id)
+        {
+            if (IsAdmin())
+            {
+                if (_cardServices.DeleteCard(id))
+                {
+                    return RedirectToAction("ManageCard");
+                }
+                Alert("Delete Card failed", NotificationType.error);
+                return RedirectToAction("ManageCard");
+            }
+            Alert("You not permit to access that page", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+
+        #region Feedback
         //Manage Feedback//
         // GET: Admin/ManageFeedback
         public IActionResult ManageFeedback(int? page)
@@ -140,249 +439,9 @@ namespace eGreeting.Controllers
                 return RedirectToAction("ManageFeedback");
             }
         }
+        #endregion
 
-        //Manage Card//
-        // GET: Admin/ManageCard
-        public IActionResult ManageCard(string pName, int? page)
-        {
-            if (IsAdmin())
-            {
-                var cards = _cardServices.GetCards();
-                int maxSize = 9;
-                var pageNum = page ?? 1;
-                if (!string.IsNullOrEmpty(pName))
-                {
-                    var model = cards.Where(x => x.CardName.Contains(pName.ToLower()) || x.CardName.Contains(pName.ToUpper()))
-                        .OrderBy(x=>x.CardName)
-                        .ToPagedList(pageNum, maxSize);
-                    ViewBag.page = model;
-                    return View();
-                }
-                else
-                {
-                    var model = cards.OrderBy(x => x.CardName).ToPagedList(pageNum, maxSize);
-                    ViewBag.page = model;
-                    return View();
-                }
-            }
-            Alert("You not permit to access that page", NotificationType.warning);
-            return RedirectToAction("Login", "Home");
-        }
-
-        // GET: Admin/CreateCard
-        public IActionResult CreateCard()
-        {
-            if (IsAdmin())
-            {
-                var categoryList = _categoryServices.GetCategories();
-                ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
-                return View();
-            }
-            Alert("You not permit to access that page", NotificationType.warning);
-            return RedirectToAction("Index", "Home");
-        }
-
-        // POST: Admin/CreateCard
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CreateCard(Card newCard,IFormFile file)
-        {
-            try
-            {
-                if (IsAdmin())
-                {
-                    if (ModelState.IsValid)
-                    {
-                        if (file != null && file.Length > 0)
-                        {
-                            if (_cardServices.GetNameCard(newCard.CardName))
-                            {
-                                Alert("Namecard has been exist.", NotificationType.error);
-                                return View();
-                            }
-
-                            var ext = Path.GetExtension(file.FileName);
-                            if (CheckExtImg(ext))
-                            {
-                                var fileName = Path.GetFileName(file.FileName);
-                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath,"ImageCard");
-                                newCard.ImageName = fileName;
-                                newCard.DateCreated = DateTime.Now;
-                                if (_cardServices.GetImageCard(fileName))
-                                {
-                                    Alert("Image Name has been exist.", NotificationType.error);
-                                    return View();
-                                }
-                                if (_cardServices.CreateCard(newCard))
-                                {
-                                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                                    {
-                                        file.CopyTo(fileStream);
-                                    }
-                                    //file.SaveAs(imagePath);
-                                    Alert("Create new Card successfully", NotificationType.success);
-                                    return RedirectToAction("ManageCard");
-                                }
-                                Alert("Create new card failed.", NotificationType.error);
-                                return View();
-                            }
-                            else
-                            {
-                                Alert("File format invalid. Please select file *.png/.jpg/.jpeg.", NotificationType.error);
-                                return View();
-                            }
-                        }
-                        else
-                        {
-                            Alert("Please choose Image", NotificationType.error);
-                            return View();
-                        }
-                    }
-                    return View();
-                }
-                Alert("You not permit to access that page", NotificationType.warning);
-                return RedirectToAction("Login", "Home");
-            }
-            catch (Exception e)
-            {
-                Alert(e.Message, NotificationType.error);
-                return View();
-            }
-        }
-
-        //GET: Admin/EditCard/5
-        public IActionResult EditCard(int id)
-        {
-            try
-            {
-                if (IsAdmin())
-                {
-                    var search = _cardServices.GetCard(id);
-                    if (search != null)
-                    {
-                        var categoryList = _categoryServices.GetCategories();
-                        ViewBag.data = new SelectList(categoryList, "CategoryId", "CategoryName");
-                        return View(search);
-                    }
-                    Alert("Cannot get Card", NotificationType.error);
-                    return RedirectToAction("Index");
-                }
-                Alert("You not permit to access that page", NotificationType.warning);
-                return RedirectToAction("Login", "Home");
-
-            }
-            catch (Exception e)
-            {
-                Alert(e.Message, NotificationType.error);
-                return RedirectToAction("Index");
-                throw;
-            }
-        }
-
-        //POST: Admin/EditCard/5
-        [HttpPost]
-        public IActionResult EditCard(Card editCard, IFormFile file)
-        {
-            try
-            {
-                if (IsAdmin())
-                {
-                    if (ModelState.IsValid)
-                    {
-                        if (file != null && file.Length > 0)
-                        {
-                            var ext = Path.GetExtension(file.FileName);
-                            if (CheckExtImg(ext))
-                            {
-                                var fileName = Path.GetFileName(file.FileName);
-                                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "ImageCard");
-                                editCard.ImageName = fileName;
-                                if (editCard.DateCreated == null)
-                                {
-                                    editCard.DateCreated = DateTime.Now;
-                                }
-
-                                if (_cardServices.EditCard(editCard))
-                                {
-                                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                                    {
-                                        file.CopyTo(fileStream);
-                                    }
-                                    //file.SaveAs(imagePath);
-                                    Alert("Update Card successfully", NotificationType.success);
-                                    return RedirectToAction("ManageCard");
-                                }
-                                Alert("Update card failed.", NotificationType.error);
-                                return View();
-                            }
-                            else
-                            {
-                                Alert("File format invalid. Please select file *.png/.jpg/.jpeg.", NotificationType.error);
-                                return View();
-                            }
-                        }
-                        else
-                        {
-                            if (editCard.DateCreated == null)
-                            {
-                                editCard.DateCreated = DateTime.Now;
-                            }
-                            if (_cardServices.EditCard(editCard))
-                            {
-                                Alert("Update Card successfully", NotificationType.success);
-                                return RedirectToAction("ManageCard");
-                            }
-                            Alert("Update card failed.", NotificationType.error);
-                            return View();
-                        }
-                    }
-                    return RedirectToAction("Index");
-                }
-                Alert("You not permit to access that page", NotificationType.warning);
-                return RedirectToAction("Login", "Home");
-            }
-            catch (Exception e)
-            {
-                Alert(e.Message, NotificationType.error);
-                return View();
-            }
-        }
-
-        private readonly List<string> ImageExtension = new List<string> { ".png", ".jpg", ".jpeg" };
-
-        bool CheckExtImg(string ext)
-        {
-            return ImageExtension.Contains(ext.ToLower());
-        }
-
-
-        // GET: Admin/Delete/5
-        public IActionResult DeleteCard(int id)
-        {
-            try
-            {
-                if (IsAdmin())
-                {
-                    if (id >= 0)
-                    {
-                        if (_cardServices.DeleteCard(id))
-                        {
-                            return RedirectToAction("ManageCard");
-                        }
-                    }
-                    Alert("Delete Card failed", NotificationType.error);
-                    return RedirectToAction("ManageCard");
-                }
-                Alert("You not permit to access that page", NotificationType.warning);
-                return RedirectToAction("Index", "Home");
-            }
-            catch
-            {
-                return RedirectToAction("ManageCard");
-            }
-        }
-
-
+        #region User
         //Manage User//
         // GET: Admin/ManageUser
         public IActionResult ManageUser(int? page)
@@ -391,7 +450,7 @@ namespace eGreeting.Controllers
             {
                 int maxSize = 5;
                 var pageNum = page ?? 1;
-                var users = _userServices.GetUsers().OrderBy(x=>x.Role).ToPagedList(pageNum, maxSize);
+                var users = _userServices.GetUsers().OrderBy(x => x.Role).ToPagedList(pageNum, maxSize);
                 ViewBag.page = users;
                 return View();
             }
@@ -505,16 +564,16 @@ namespace eGreeting.Controllers
             {
                 if (IsAdmin())
                 {
-                        if (_userServices.DeleteUser(username))
-                        {
-                            Alert("Delete User Successfully .", NotificationType.success);
-                            return RedirectToAction("ManageUser");
-                        }
-                        else
-                        {
-                            Alert("Delete error, cannot find this User!!!", NotificationType.error);
-                            return RedirectToAction("ManageUser");
-                        }                    
+                    if (_userServices.DeleteUser(username))
+                    {
+                        Alert("Delete User Successfully .", NotificationType.success);
+                        return RedirectToAction("ManageUser");
+                    }
+                    else
+                    {
+                        Alert("Delete error, cannot find this User!!!", NotificationType.error);
+                        return RedirectToAction("ManageUser");
+                    }
                 }
                 Alert("You not permit to access that page", NotificationType.warning);
                 return RedirectToAction("Index", "Home");
@@ -525,7 +584,9 @@ namespace eGreeting.Controllers
                 return RedirectToAction("ManageCard");
             }
         }
+        #endregion
 
+        #region Payment
         //Manage Payment//
         // GET: /Admin/ManagePaymentInfo
         public IActionResult ManagePaymentInfo(int? page)
@@ -534,7 +595,7 @@ namespace eGreeting.Controllers
             {
                 int maxSize = 5;
                 var pageNum = page ?? 1;
-                var payments = _paymentServices.GetPayments().OrderByDescending(x=>x.DateCreated).ToPagedList(pageNum, maxSize);
+                var payments = _paymentServices.GetPayments().OrderByDescending(x => x.DateCreated).ToPagedList(pageNum, maxSize);
                 ViewBag.page = payments;
                 return View();
             }
@@ -553,8 +614,8 @@ namespace eGreeting.Controllers
                     var searchUser = _userServices.GetUser(searchPayment.UserName);
                     if (searchUser != null)
                     {
-                           Alert("Change status activation successfully", NotificationType.success);
-                            return RedirectToAction("ManagePaymentInfo");
+                        Alert("Change status activation successfully", NotificationType.success);
+                        return RedirectToAction("ManagePaymentInfo");
                     }
                     Alert("Cannot found User.", NotificationType.error);
                     return View();
@@ -590,17 +651,18 @@ namespace eGreeting.Controllers
                 throw;
             }
         }
+        #endregion
 
+        #region Transaction
         //Manage Transaction//
-        // GET: /Admin/ManageTrans
-
+        // GET: /Admin/ManageTransaction
         public IActionResult ManageTransaction(int? page)
         {
             if (IsAdmin())
             {
                 int maxSize = 9;
                 var pageNum = page ?? 1;
-                var transactions = _transactionServices.GetTransactions().OrderByDescending(x=>x.TimeSend).ToPagedList(pageNum, maxSize);
+                var transactions = _transactionServices.GetTransactions().OrderByDescending(x => x.TimeSend).ToPagedList(pageNum, maxSize);
                 ViewBag.page = transactions;
                 return View();
             }
@@ -615,26 +677,20 @@ namespace eGreeting.Controllers
 
         public IActionResult DeleteManageTransaction(int id)
         {
-            try
+            if (IsAdmin())
             {
                 if (_transactionServices.DeleteTransaction(id))
                 {
                     Alert("Delete Transaction Successfully .", NotificationType.success);
                     return RedirectToAction("ManageTransactions");
                 }
-                else
-                {
-                    Alert("Delete Transaction error, cannot find this User!!!", NotificationType.error);
-                    return RedirectToAction("ManageTransactions");
-                }
-            }
-            catch (Exception e)
-            {
-                Alert(e.Message, NotificationType.error);
+                Alert("Delete transaction failed.", NotificationType.error);
                 return RedirectToAction("ManageTransactions");
-                throw;
             }
+            Alert("You not permit to access this action.", NotificationType.warning);
+            return RedirectToAction("Index", "Home");
         }
+        #endregion
 
         public void Alert(string message, NotificationType notificationType)
         {

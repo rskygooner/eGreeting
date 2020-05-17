@@ -1,4 +1,5 @@
 ﻿using eGreeting.Models;
+using Microsoft.CodeAnalysis.Differencing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,11 @@ namespace eGreeting.Services
 {
     public interface ICategoryServices
     {
-        IEnumerable<Category> GetCategories();
+        List<Category> GetCategories();
+        Category GetCategory(int id);
+        bool CreateCategory(Category category);
+        bool EditCategory(Category category);
+        bool DeleteCategory(int id);
     }
     public class CategoryServices : ICategoryServices
     {
@@ -19,10 +24,57 @@ namespace eGreeting.Services
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Category> GetCategories()
+        public List<Category> GetCategories()
         {
-            IEnumerable<Category> categories = _dbContext.Categories.ToList();
+            List<Category> categories = _dbContext.Categories.ToList();
             return categories;
+        }
+        public Category GetCategory(int id)
+        {
+            Category category = _dbContext.Categories.Find(id);
+            return category;
+        }
+        public bool CreateCategory(Category category)
+        {
+            try
+            {
+                _dbContext.Categories.Add(category);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public bool EditCategory(Category category)
+        {
+            try
+            {
+                var cate = _dbContext.Categories.Find(category.CategoryId);
+                cate.CategoryName = category.CategoryName;
+                cate.IsActive = category.IsActive;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public bool DeleteCategory(int id)
+        {
+            try
+            {
+                var cate = _dbContext.Categories.Find(id);
+                _dbContext.Remove(cate);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
